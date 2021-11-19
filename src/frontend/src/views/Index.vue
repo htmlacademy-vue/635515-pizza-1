@@ -11,7 +11,7 @@
 
               <div class="sheet__content dough">
                 <label
-                  v-for="dough in doughExtended"
+                  v-for="dough in doughOptions"
                   :key="dough.id"
                   class="dough__input"
                   :class="`dough__input--${dough.internalName}`"
@@ -35,7 +35,7 @@
 
               <div class="sheet__content diameter">
                 <label
-                  v-for="size in sizeExtended"
+                  v-for="size in sizes"
                   :key="size.id"
                   class="diameter__input"
                   :class="`diameter__input--${size.internalName}`"
@@ -63,7 +63,7 @@
                   <p>Основной соус:</p>
 
                   <label
-                    v-for="sauce in pizza.sauces"
+                    v-for="sauce in sauces"
                     :key="sauce.id"
                     class="radio ingredients__input"
                   >
@@ -155,7 +155,6 @@ import misc from "@/static/misc.json";
 import pizza from "@/static/pizza.json";
 import user from "@/static/user.json";
 import { extendDough, extendIngredient } from "@/common/helpers";
-import { SizeNames } from "@/common/constants";
 
 export default {
   name: "IndexHome",
@@ -164,13 +163,12 @@ export default {
       misc,
       pizza,
       user,
+      sauces: pizza.sauces,
+      sizes: pizza.sizes,
       ingredients: pizza.ingredients.map((ingredient) =>
         extendIngredient(ingredient)
       ),
-      sizeExtended: pizza.sizes.map((size) => {
-        return { ...size, internalName: SizeNames[size.multiplier] };
-      }),
-      doughExtended: pizza.dough.map((doughItem) => extendDough(doughItem)),
+      doughOptions: pizza.dough.map((doughItem) => extendDough(doughItem)),
     };
   },
 };
