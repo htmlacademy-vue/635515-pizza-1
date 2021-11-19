@@ -34,33 +34,19 @@
               <h2 class="title title--small sheet__title">Выберите размер</h2>
 
               <div class="sheet__content diameter">
-                <label class="diameter__input diameter__input--small">
+                <label
+                  v-for="size in sizeExtended"
+                  :key="size.id"
+                  class="diameter__input"
+                  :class="`diameter__input--${size.internalName}`"
+                >
                   <input
                     type="radio"
                     name="diameter"
-                    value="small"
+                    :value="size.internalName"
                     class="visually-hidden"
                   />
-                  <span>23 см</span>
-                </label>
-                <label class="diameter__input diameter__input--normal">
-                  <input
-                    type="radio"
-                    name="diameter"
-                    value="normal"
-                    class="visually-hidden"
-                    checked
-                  />
-                  <span>32 см</span>
-                </label>
-                <label class="diameter__input diameter__input--big">
-                  <input
-                    type="radio"
-                    name="diameter"
-                    value="big"
-                    class="visually-hidden"
-                  />
-                  <span>45 см</span>
+                  <span>{{ size.name }}</span>
                 </label>
               </div>
             </div>
@@ -507,6 +493,7 @@ import misc from "@/static/misc.json";
 import pizza from "@/static/pizza.json";
 import user from "@/static/user.json";
 import { extendDough } from "@/common/helpers";
+import { SizeNames } from "@/common/constants";
 
 export default {
   name: "IndexHome",
@@ -515,6 +502,9 @@ export default {
       misc,
       pizza,
       user,
+      sizeExtended: pizza.sizes.map((size) => {
+        return { ...size, internalName: SizeNames[size.multiplier] };
+      }),
       doughExtended: pizza.dough.map((doughItem) => extendDough(doughItem)),
     };
   },
