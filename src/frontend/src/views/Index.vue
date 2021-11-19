@@ -62,13 +62,17 @@
                 <div class="ingredients__sauce">
                   <p>Основной соус:</p>
 
-                  <label class="radio ingredients__input">
-                    <input type="radio" name="sauce" value="tomato" checked />
-                    <span>Томатный</span>
-                  </label>
-                  <label class="radio ingredients__input">
-                    <input type="radio" name="sauce" value="creamy" />
-                    <span>Сливочный</span>
+                  <label
+                    v-for="sauce in pizza.sauces"
+                    :key="sauce.id"
+                    class="radio ingredients__input"
+                  >
+                    <input
+                      type="radio"
+                      name="sauce"
+                      :value="sauce.internalName"
+                    />
+                    <span>{{ sauce.name }}</span>
                   </label>
                 </div>
 
