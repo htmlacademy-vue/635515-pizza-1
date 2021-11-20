@@ -36,13 +36,11 @@
     {
       "id": 1,
       "name": "Томатный",
-      "internalName": "tomato",
       "price": 50
     },
     {
       "id": 2,
       "name": "Сливочный",
-      "internalName": "creamy",
       "price": 50
     }
   ],
@@ -51,21 +49,18 @@
       "id": 1,
       "name": "23 см",
       "image": "/public/img/diameter.svg",
-      "internalName": "small",
       "multiplier": 1
     },
     {
       "id": 2,
       "name": "32 см",
       "image": "/public/img/diameter.svg",
-      "internalName": "normal",
       "multiplier": 2
     },
     {
       "id": 3,
       "name": "45 см",
       "image": "/public/img/diameter.svg",
-      "internalName": "big",
       "multiplier": 3
     }
   ]

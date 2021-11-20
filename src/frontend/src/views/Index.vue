@@ -155,6 +155,8 @@ import misc from "@/static/misc.json";
 import pizza from "@/static/pizza.json";
 import user from "@/static/user.json";
 import { extendDough, extendIngredient } from "@/common/helpers";
+import SauceNames from "../common/enums/sauceNames";
+import SizeNames from "../common/enums/sizeNames";
 
 export default {
   name: "IndexHome",
@@ -163,8 +165,14 @@ export default {
       misc,
       pizza,
       user,
-      sauces: pizza.sauces,
-      sizes: pizza.sizes,
+      sauces: pizza.sauces.map((sauce) => ({
+        ...sauce,
+        internalName: SauceNames[sauce.name],
+      })),
+      sizes: pizza.sizes.map((size) => ({
+        ...size,
+        internalName: SizeNames[size.multiplier],
+      })),
       ingredients: pizza.ingredients.map((ingredient) =>
         extendIngredient(ingredient)
       ),
