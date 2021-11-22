@@ -9,6 +9,7 @@
       type="radio"
       :name="nameOfTheSelectable"
       :value="value"
+      @change="handleChange"
       class="visually-hidden"
     />
     <b v-if="description">{{ label }}</b>
@@ -34,6 +35,11 @@ export default {
     },
     description: {
       type: String,
+    },
+  },
+  methods: {
+    handleChange() {
+      this.$emit("selectItem", this.value);
     },
   },
 };

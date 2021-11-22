@@ -1,6 +1,11 @@
 ﻿<template>
   <label class="radio">
-    <input type="radio" :name="nameOfTheSelectable" :value="value" />
+    <input
+      type="radio"
+      :name="nameOfTheSelectable"
+      :value="value"
+      @change="handleChange"
+    />
     <span>{{ label }}</span>
   </label>
 </template>
@@ -19,6 +24,11 @@ export default {
     value: {
       type: String,
       required: true,
+    },
+  },
+  methods: {
+    handleChange() {
+      this.$emit("selectItem", this.value);
     },
   },
 };

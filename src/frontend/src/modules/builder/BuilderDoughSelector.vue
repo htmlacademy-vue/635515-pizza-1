@@ -11,6 +11,7 @@
           :label="dough.name"
           :value="dough.internalName"
           :description="dough.description"
+          @selectItem="selectItem"
         />
       </div>
     </div>
@@ -19,6 +20,8 @@
 
 <script>
 import SelectorItem from "@/common/components/SelectorItem";
+import EventBus from "./EventBus";
+import EventsEnum from "./enums/events";
 
 export default {
   name: "BuilderDoughSelector",
@@ -27,6 +30,25 @@ export default {
     doughOptions: {
       type: Array,
       required: true,
+    },
+  },
+  data() {
+    return { selectedItemValue: "" };
+  },
+  methods: {
+    selectItem(value) {
+      if (this.selectedItemValue !== "") {
+        const oldSelectedPosition = this.doughOptions.filter(
+          (item) => item.internalName === this.selectedItemValue
+        )[0];
+        EventBus.$emit(EventsEnum.RemovePosition, oldSelectedPosition);
+      }
+
+      this.selectedItemValue = value;
+      const selectedPosition = this.doughOptions.filter(
+        (item) => item.internalName === value
+      )[0];
+      EventBus.$emit(EventsEnum.AddPosition, selectedPosition);
     },
   },
 };

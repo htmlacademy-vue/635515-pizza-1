@@ -15,3 +15,21 @@ export const extendIngredient = (ingredient) => {
     internalName: regexResult.length > 1 ? regexResult[1] : "",
   };
 };
+
+export const hiddenError = (msg) => {
+  var console = console || {
+    error: function () {},
+  };
+  console.error(msg);
+};
+
+export const initCoutns = (ingredients) => {
+  let ret = {};
+  ingredients.forEach((ingredient) => {
+    ret[ingredient.internalName] = {
+      price: ingredient.price,
+      count: 0,
+    };
+  });
+  return ret;
+};

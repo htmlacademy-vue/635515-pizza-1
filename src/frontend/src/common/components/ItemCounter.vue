@@ -11,12 +11,18 @@
       <button
         type="button"
         class="counter__button counter__button--minus"
-        disabled
+        @click="handleDecrease"
+        :disabled="isDecreaseUnavailable()"
       >
         <span class="visually-hidden">Меньше</span>
       </button>
       <input type="text" name="counter" class="counter__input" :value="count" />
-      <button type="button" class="counter__button counter__button--plus">
+      <button
+        type="button"
+        class="counter__button counter__button--plus"
+        @click="handleIncrease"
+        :disabled="isIncreaseUnavailable()"
+      >
         <span class="visually-hidden">Больше</span>
       </button>
     </div>
@@ -38,9 +44,33 @@ export default {
       type: String,
       required: true,
     },
-    count: {
-      type: Number,
-      default: 0,
+  },
+  data() {
+    return {
+      count: 0,
+    };
+  },
+  watch: {
+    count(newCount, oldCount) {
+      this.$emit("change", {
+        newCount,
+        oldCount,
+        internalName: this.internalName,
+      });
+    },
+  },
+  methods: {
+    isIncreaseUnavailable() {
+      return false;
+    },
+    isDecreaseUnavailable() {
+      return this.count === 0;
+    },
+    handleIncrease() {
+      this.count++;
+    },
+    handleDecrease() {
+      this.count--;
     },
   },
 };
