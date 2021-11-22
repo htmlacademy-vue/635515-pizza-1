@@ -42,6 +42,7 @@ import RadioButton from "@/common/components/RadioButton";
 import ItemCounter from "@/common/components/ItemCounter";
 import EventBus from "./EventBus";
 import EventsEnum from "./enums/events";
+import PositionTypes from "./enums/positionTypes";
 import { hiddenError } from "@/common/helpers";
 
 export default {
@@ -79,10 +80,12 @@ export default {
   },
   watch: {
     addedIngredients(newArray, oldArray) {
+      const type = PositionTypes.Ingredient;
       oldArray.forEach((oldItem) => {
         EventBus.$emit(EventsEnum.RemovePosition, {
           ...oldItem,
           price: oldItem.price * oldItem.count,
+          type,
         });
       });
 
@@ -90,24 +93,29 @@ export default {
         EventBus.$emit(EventsEnum.AddPosition, {
           ...newItem,
           price: newItem.price * newItem.count,
+          type,
         });
       });
     },
   },
   methods: {
     selectItem(value) {
+      const type = PositionTypes.Sauce;
       if (this.selectedItemValue !== "") {
         const oldSelectedPosition = this.sauces.filter(
           (item) => item.internalName === this.selectedItemValue
         )[0];
-        EventBus.$emit(EventsEnum.RemovePosition, oldSelectedPosition);
+        EventBus.$emit(EventsEnum.RemovePosition, {
+          ...oldSelectedPosition,
+          type,
+        });
       }
 
       this.selectedItemValue = value;
       const selectedPosition = this.sauces.filter(
         (item) => item.internalName === value
       )[0];
-      EventBus.$emit(EventsEnum.AddPosition, selectedPosition);
+      EventBus.$emit(EventsEnum.AddPosition, { ...selectedPosition, type });
     },
     handleCounterChanged(value) {
       const ingredientsByName = this.ingredientCounts.filter(

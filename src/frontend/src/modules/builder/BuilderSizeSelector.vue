@@ -21,6 +21,7 @@
 import SelectorItem from "@/common/components/SelectorItem";
 import EventBus from "./EventBus";
 import EventsEnum from "./enums/events";
+import PositionTypes from "./enums/positionTypes";
 
 export default {
   name: "BuilderSizeSelector",
@@ -36,18 +37,22 @@ export default {
   },
   methods: {
     selectItem(value) {
+      const type = PositionTypes.Size;
       if (this.selectedItemValue !== "") {
         const oldSelectedPosition = this.sizes.filter(
           (item) => item.internalName === this.selectedItemValue
         )[0];
-        EventBus.$emit(EventsEnum.RemovePosition, oldSelectedPosition);
+        EventBus.$emit(EventsEnum.RemovePosition, {
+          ...oldSelectedPosition,
+          type,
+        });
       }
 
       this.selectedItemValue = value;
       const selectedPosition = this.sizes.filter(
         (item) => item.internalName === value
       )[0];
-      EventBus.$emit(EventsEnum.AddPosition, selectedPosition);
+      EventBus.$emit(EventsEnum.AddPosition, { ...selectedPosition, type });
     },
   },
 };
