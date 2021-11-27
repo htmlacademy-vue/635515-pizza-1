@@ -57,8 +57,8 @@ export default {
         .slice();
     },
   },
-  mounted() {
-    EventBus.$on(EventsEnum.AddPosition, (position) => {
+  methods: {
+    addPosition(position) {
       if (!("price" in position || "multiplier" in position)) {
         hiddenError(
           `Event "${EventsEnum.AddPosition}" passed an object with the wrong structure. The object must contain a price or multiplier field.`
@@ -66,8 +66,8 @@ export default {
         return;
       }
       this.positions.push(position);
-    });
-    EventBus.$on(EventsEnum.RemovePosition, (position) => {
+    },
+    removePosition(position) {
       const findedPositions = this.positions.filter(
         (item) => item.internalName === position.internalName
       );
@@ -81,7 +81,11 @@ export default {
       if (index !== -1) {
         this.positions.splice(index, 1);
       }
-    });
+    },
+  },
+  mounted() {
+    EventBus.$on(EventsEnum.AddPosition, this.addPosition);
+    EventBus.$on(EventsEnum.RemovePosition, this.removePosition);
   },
 };
 </script>
