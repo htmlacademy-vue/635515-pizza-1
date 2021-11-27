@@ -1,0 +1,1 @@
+﻿export const MAX_REPETITIONS_OF_INGREDIENTS = 3;

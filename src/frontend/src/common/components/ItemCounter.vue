@@ -44,6 +44,10 @@ export default {
       type: String,
       required: true,
     },
+    max: {
+      type: Number,
+      required: false,
+    },
   },
   data() {
     return {
@@ -61,7 +65,7 @@ export default {
   },
   methods: {
     isIncreaseUnavailable() {
-      return false;
+      return this.max ? this.count >= this.max : false;
     },
     isDecreaseUnavailable() {
       return this.count === 0;
