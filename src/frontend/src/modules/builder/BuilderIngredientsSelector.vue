@@ -29,6 +29,7 @@
               @change="handleCounterChanged"
               :label="ingredient.name"
               :internalName="ingredient.internalName"
+              :max="MAX_REPETITIONS_OF_INGREDIENTS"
             />
           </ul>
         </div>
@@ -43,7 +44,8 @@ import ItemCounter from "@/common/components/ItemCounter";
 import EventBus from "./EventBus";
 import EventsEnum from "./enums/events";
 import PositionTypes from "./enums/positionTypes";
-import { hiddenError } from "@/common/helpers";
+import { hiddenError, extendToType } from "@/common/helpers";
+import { MAX_REPETITIONS_OF_INGREDIENTS } from "@/common/constants";
 
 export default {
   name: "BuilderIngredientsSelector",
@@ -63,8 +65,10 @@ export default {
   },
   data() {
     return {
+      MAX_REPETITIONS_OF_INGREDIENTS,
       selectedItemValue: "",
       ingredientCounts: this.ingredients.map((ingredient) => ({
+        type: PositionTypes.Ingredient,
         internalName: ingredient.internalName,
         price: ingredient.price,
         count: 0,
@@ -77,15 +81,16 @@ export default {
         .filter((ingredient) => ingredient.count > 0)
         .slice();
     },
+    typedSauces() {
+      return this.sauces.map((item) => extendToType(item, PositionTypes.Sauce));
+    },
   },
   watch: {
     addedIngredients(newArray, oldArray) {
-      const type = PositionTypes.Ingredient;
       oldArray.forEach((oldItem) => {
         EventBus.$emit(EventsEnum.RemovePosition, {
           ...oldItem,
           price: oldItem.price * oldItem.count,
-          type,
         });
       });
 
@@ -93,29 +98,25 @@ export default {
         EventBus.$emit(EventsEnum.AddPosition, {
           ...newItem,
           price: newItem.price * newItem.count,
-          type,
         });
       });
     },
   },
   methods: {
     selectItem(value) {
-      const type = PositionTypes.Sauce;
+      // const type = PositionTypes.Sauce;
       if (this.selectedItemValue !== "") {
-        const oldSelectedPosition = this.sauces.filter(
+        const oldSelectedPosition = this.typedSauces.filter(
           (item) => item.internalName === this.selectedItemValue
         )[0];
-        EventBus.$emit(EventsEnum.RemovePosition, {
-          ...oldSelectedPosition,
-          type,
-        });
+        EventBus.$emit(EventsEnum.RemovePosition, { ...oldSelectedPosition });
       }
 
       this.selectedItemValue = value;
-      const selectedPosition = this.sauces.filter(
+      const selectedPosition = this.typedSauces.filter(
         (item) => item.internalName === value
       )[0];
-      EventBus.$emit(EventsEnum.AddPosition, { ...selectedPosition, type });
+      EventBus.$emit(EventsEnum.AddPosition, { ...selectedPosition });
     },
     handleCounterChanged(value) {
       const ingredientsByName = this.ingredientCounts.filter(

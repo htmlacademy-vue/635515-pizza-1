@@ -23,6 +23,7 @@ import SelectorItem from "@/common/components/SelectorItem";
 import EventBus from "./EventBus";
 import EventsEnum from "./enums/events";
 import PositionTypes from "./enums/positionTypes";
+import { extendToType } from "@/common/helpers";
 
 export default {
   name: "BuilderDoughSelector",
@@ -36,24 +37,27 @@ export default {
   data() {
     return { selectedItemValue: "" };
   },
+  computed: {
+    typedDough() {
+      return this.doughOptions.map((item) =>
+        extendToType(item, PositionTypes.Dough)
+      );
+    },
+  },
   methods: {
     selectItem(value) {
-      const type = PositionTypes.Dough;
       if (this.selectedItemValue !== "") {
-        const oldSelectedPosition = this.doughOptions.filter(
+        const oldSelectedPosition = this.typedDough.filter(
           (item) => item.internalName === this.selectedItemValue
         )[0];
-        EventBus.$emit(EventsEnum.RemovePosition, {
-          ...oldSelectedPosition,
-          type,
-        });
+        EventBus.$emit(EventsEnum.RemovePosition, { ...oldSelectedPosition });
       }
 
       this.selectedItemValue = value;
-      const selectedPosition = this.doughOptions.filter(
+      const selectedPosition = this.typedDough.filter(
         (item) => item.internalName === value
       )[0];
-      EventBus.$emit(EventsEnum.AddPosition, { ...selectedPosition, type });
+      EventBus.$emit(EventsEnum.AddPosition, { ...selectedPosition });
     },
   },
 };

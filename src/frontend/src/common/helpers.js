@@ -33,3 +33,7 @@ export const initCoutns = (ingredients) => {
   });
   return ret;
 };
+
+export const extendToType = (item, type) => {
+  return { ...item, type };
+};
