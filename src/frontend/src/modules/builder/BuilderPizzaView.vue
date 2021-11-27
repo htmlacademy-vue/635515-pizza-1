@@ -13,7 +13,10 @@
           v-for="ingredient in ingredients"
           :key="`${ingredient.id}_${ingredient.internalName}`"
           class="pizza__filling"
-          :class="`pizza__filling--${ingredient.internalName}`"
+          :class="[
+            `pizza__filling--${ingredient.internalName}`,
+            `pizza__filling--${ingredient.repeating}`,
+          ]"
         ></div>
       </div>
     </div>
@@ -29,6 +32,7 @@ import EventBus from "./EventBus";
 import EventsEnum from "./enums/events";
 import { hiddenError } from "@/common/helpers";
 import PositionTypes from "./enums/positionTypes";
+import Repeats from "./enums/repeats";
 
 export default {
   name: "BuilderPizzaView",
@@ -39,7 +43,10 @@ export default {
     ingredients() {
       return this.positions
         .filter((position) => position.type === PositionTypes.Ingredient)
-        .slice();
+        .map((ingredient) => ({
+          ...ingredient,
+          repeating: Repeats[ingredient.count],
+        }));
     },
     doughOptions() {
       return this.positions
