@@ -1,14 +1,14 @@
+$SIZE_SMALL: 157px;
 .pizza {
-  position: relative;
-
   display: block;
 
   box-sizing: border-box;
-  // width: 100%;
 
   background-repeat: no-repeat;
   background-position: center;
   background-size: 100%;
+
+  position: absolute;
 
   &--foundation--large-creamy {
     background-image: url("~@/assets/img/foundation/big-creamy.svg");
@@ -30,48 +30,27 @@
     width: 100%;
   }
   &--size--normal {
-    // position: relative;
-    width: 80%;
-    top: 50%;
-    -webkit-transform: translateY(-20%);
-    -moz-transform: translateY(-20%);
-    -ms-transform: translateY(-20%);
-    -o-transform: translateY(-20%);
-    transform: translateY(-20%);
-    margin-left: auto;
-    margin-right: auto;
-    position: sticky;
+    width: 252px;
+    top: calc(50% - 252px / 2);
+    left: calc(50% - 252px / 2);
   }
   &--size--small {
-    // position: relative;
-    width: 50%;
-    top: 50%;
-    -webkit-transform: translateY(-50%);
-    -moz-transform: translateY(-50%);
-    -ms-transform: translateY(-50%);
-    -o-transform: translateY(-50%);
-    transform: translateY(-50%);
-    margin-left: auto;
-    margin-right: auto;
-    position: sticky;
+    width: 157px;
+    top: calc(50% - 157px / 2);
+    left: calc(50% - 157px / 2);
   }
 }
 
-.pizza__empty-message{
-  position: relative;
+.pizza__empty-message {
+  position: absolute;
+  width: 100%;
   display: block;
   box-sizing: border-box;
 
   text-align: center;
   color: #666;
 
-  top: 50%;
-  -webkit-transform: translateY(-50%);
-  -moz-transform: translateY(-50%);
-  -ms-transform: translateY(-50%);
-  -o-transform: translateY(-50%);
-  transform: translateY(-50%);
-  position: sticky;
+  top: 40%;
 }
 
 .pizza__wrapper {
