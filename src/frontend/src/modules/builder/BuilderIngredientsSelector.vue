@@ -23,13 +23,15 @@
 
           <ul class="ingredients__list">
             <ItemCounter
-              v-for="ingredient in ingredients"
+              v-for="ingredient in extendedIngredients"
               :key="ingredient.id"
               nameOfTheSelectable="ingredients"
               @change="handleCounterChanged"
               :label="ingredient.name"
               :internalName="ingredient.internalName"
+              :count="ingredient.count"
               :max="MAX_REPETITIONS_OF_INGREDIENTS"
+              :transferData="{ ...ingredient, count: ingredient.count + 1 }"
             />
           </ul>
         </div>
@@ -67,17 +69,16 @@ export default {
     return {
       MAX_REPETITIONS_OF_INGREDIENTS,
       selectedItemValue: "",
-      ingredientCounts: this.ingredients.map((ingredient) => ({
+      extendedIngredients: this.ingredients.map((ingredient) => ({
+        ...ingredient,
         type: PositionTypes.Ingredient,
-        internalName: ingredient.internalName,
-        price: ingredient.price,
         count: 0,
       })),
     };
   },
   computed: {
     addedIngredients() {
-      return this.ingredientCounts
+      return this.extendedIngredients
         .filter((ingredient) => ingredient.count > 0)
         .slice();
     },
@@ -119,13 +120,14 @@ export default {
       EventBus.$emit(EventsEnum.AddPosition, { ...selectedPosition });
     },
     handleCounterChanged(value) {
-      const ingredientsByName = this.ingredientCounts.filter(
+      const ingredientsByName = this.extendedIngredients.filter(
         (ingredient) => ingredient.internalName === value.internalName
       );
       if (ingredientsByName.length === 0) {
         hiddenError(
           `Collections crash. Can't find element with internal name "${value.internalName}".`
         );
+        return;
       }
       ingredientsByName[0].count = value.newCount;
     },
@@ -138,6 +140,14 @@ export default {
         };
       });
     },
+  },
+  mounted() {
+    EventBus.$on(EventsEnum.ControlValue, (position) => {
+      this.handleCounterChanged({
+        newCount: position.count,
+        internalName: position.internalName,
+      });
+    });
   },
 };
 </script>

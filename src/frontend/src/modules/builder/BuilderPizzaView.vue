@@ -1,12 +1,13 @@
 ﻿<template>
   <div class="content__constructor">
-    <div
+    <AppDrop
       v-if="sizes.length != 0 && doughOptions.length != 0 && sauces.length != 0"
       class="pizza"
       :class="[
         `pizza--foundation--${doughOptions[0].internalName}-${sauces[0].internalName}`,
         `pizza--size--${sizes[0].internalName}`,
       ]"
+      @drop="dropPosition"
     >
       <div class="pizza__wrapper">
         <div
@@ -19,7 +20,7 @@
           ]"
         ></div>
       </div>
-    </div>
+    </AppDrop>
     <div v-else class="pizza__empty-message">
       <h3>Здесь будет ваша пицца</h3>
       <p>Для начала выберите тесто, размер и соус.</p>
@@ -28,6 +29,7 @@
 </template>
 
 <script>
+import AppDrop from "@/common/components/AppDrop";
 import EventBus from "./EventBus";
 import EventsEnum from "./enums/events";
 import { hiddenError } from "@/common/helpers";
@@ -36,6 +38,9 @@ import Repeats from "./enums/repeats";
 
 export default {
   name: "BuilderPizzaView",
+  components: {
+    AppDrop,
+  },
   data() {
     return { positions: [] };
   },
@@ -87,6 +92,11 @@ export default {
       const index = this.positions.indexOf(findedPositions[0]);
       if (index !== -1) {
         this.positions.splice(index, 1);
+      }
+    },
+    dropPosition(position) {
+      if (position.type === PositionTypes.Ingredient) {
+        EventBus.$emit(EventsEnum.ControlValue, position);
       }
     },
   },

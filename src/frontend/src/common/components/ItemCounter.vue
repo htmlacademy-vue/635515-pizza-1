@@ -1,6 +1,13 @@
 ﻿<template>
   <li :class="`${nameOfTheSelectable}__item`">
-    <span class="filling" :class="`filling--${internalName}`">
+    <span
+      class="filling"
+      :class="`filling--${internalName}`"
+      :draggable="isDraggable()"
+      @dragstart.self="onDrag"
+      @dragover.prevent
+      @dragenter.prevent
+    >
       {{ label }}
     </span>
 
@@ -30,6 +37,9 @@
 </template>
 
 <script>
+import { DATA_TRANSFER_PAYLOAD } from "@/common/constants";
+import DropEffects from "./../enums/dropEffects";
+
 export default {
   name: "ItemCounter",
   props: {
@@ -44,15 +54,18 @@ export default {
       type: String,
       required: true,
     },
+    count: {
+      type: Number,
+      required: true,
+    },
     max: {
       type: Number,
       required: false,
     },
-  },
-  data() {
-    return {
-      count: 0,
-    };
+    transferData: {
+      type: Object,
+      required: false,
+    },
   },
   watch: {
     count(newCount, oldCount) {
@@ -70,11 +83,25 @@ export default {
     isDecreaseUnavailable() {
       return this.count === 0;
     },
+    isDraggable() {
+      return this.transferData !== undefined && !this.isIncreaseUnavailable();
+    },
     handleIncrease() {
       this.count++;
     },
     handleDecrease() {
       this.count--;
+    },
+    onDrag({ dataTransfer }) {
+      if (!this.isDraggable) {
+        return;
+      }
+      dataTransfer.effectAllowed = DropEffects.Link;
+      dataTransfer.dropEffect = DropEffects.Link;
+      dataTransfer.setData(
+        DATA_TRANSFER_PAYLOAD,
+        JSON.stringify(this.transferData)
+      );
     },
   },
 };
