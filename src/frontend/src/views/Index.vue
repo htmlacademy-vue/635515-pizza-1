@@ -14,14 +14,7 @@
             />
 
             <div class="content__pizza">
-              <label class="input">
-                <span class="visually-hidden">Название пиццы</span>
-                <input
-                  type="text"
-                  name="pizza_name"
-                  placeholder="Введите название пиццы"
-                />
-              </label>
+              <BuilderPizzaFields />
 
               <BuilderPizzaView />
               <BuilderPriceCounter />
@@ -48,6 +41,7 @@ import BuilderSizeSelector from "../modules/builder/BuilderSizeSelector";
 import BuilderIngredientsSelector from "../modules/builder/BuilderIngredientsSelector";
 import BuilderPizzaView from "../modules/builder/BuilderPizzaView";
 import BuilderPriceCounter from "../modules/builder/BuilderPriceCounter";
+import BuilderPizzaFields from "../modules/builder/BuilderPizzaFields";
 
 export default {
   name: "IndexHome",
@@ -58,6 +52,7 @@ export default {
     BuilderSizeSelector,
     BuilderPizzaView,
     BuilderPriceCounter,
+    BuilderPizzaFields,
   },
   data() {
     return {
