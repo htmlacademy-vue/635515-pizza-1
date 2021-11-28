@@ -37,3 +37,19 @@ export const initCoutns = (ingredients) => {
 export const extendToType = (item, type) => {
   return { ...item, type };
 };
+
+export const calculateAmount = (positions) => {
+  const withPrice = positions.filter((position) => "price" in position);
+  const withMultiplier = positions.filter(
+    (position) => "multiplier" in position
+  );
+  const sum =
+    withPrice.length > 0
+      ? withPrice.map((item) => item.price).reduce((a, b) => a + b)
+      : 0;
+  const multiplier =
+    withMultiplier.length > 0
+      ? withMultiplier.map((item) => item.multiplier).reduce((a, b) => a * b)
+      : 1;
+  return sum * multiplier;
+};

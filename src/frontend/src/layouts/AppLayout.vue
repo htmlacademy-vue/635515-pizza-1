@@ -11,9 +11,7 @@
           />
         </a>
       </div>
-      <div class="header__cart">
-        <a href="#">0 ₽</a>
-      </div>
+      <HeaderCart />
       <div class="header__user">
         <a href="#" class="header__login"><span>Войти</span></a>
       </div>
@@ -23,8 +21,11 @@
 </template>
 
 <script>
+import HeaderCart from "../modules/cart/HeaderCart.vue";
+
 export default {
   name: "AppLayout",
+  components: { HeaderCart },
 };
 </script>
 

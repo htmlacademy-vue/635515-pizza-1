@@ -15,7 +15,9 @@
 <script>
 import EventBus from "./EventBus";
 import EventsEnum from "./enums/events";
-import { hiddenError } from "@/common/helpers";
+import CartEventBus from "./../cart/EventBus";
+import CartEventsEnum from "./../cart/enums/events";
+import { hiddenError, calculateAmount } from "@/common/helpers";
 import PositionTypes from "./enums/positionTypes";
 
 export default {
@@ -48,23 +50,7 @@ export default {
       if (this.positions.length === 0) {
         return 0;
       }
-      const withPrice = this.positions.filter(
-        (position) => "price" in position
-      );
-      const withMultiplier = this.positions.filter(
-        (position) => "multiplier" in position
-      );
-      const sum =
-        withPrice.length > 0
-          ? withPrice.map((item) => item.price).reduce((a, b) => a + b)
-          : 0;
-      const multiplier =
-        withMultiplier.length > 0
-          ? withMultiplier
-              .map((item) => item.multiplier)
-              .reduce((a, b) => a * b)
-          : 1;
-      return sum * multiplier;
+      return calculateAmount(this.positions);
     },
   },
   methods: {
@@ -101,7 +87,10 @@ export default {
       }
     },
     onSubmit() {
-      // EventBus.$emit(EventsEnum.ValidateFields);
+      CartEventBus.$emit(CartEventsEnum.AddToCart, {
+        name: this.pizzaName,
+        positions: this.positions.slice(),
+      });
     },
     changeFields(fields) {
       const { pizzaName } = fields;
