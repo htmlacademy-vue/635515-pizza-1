@@ -29,7 +29,7 @@
               @change="handleCounterChanged"
               :label="ingredient.name"
               :internalName="ingredient.internalName"
-              :count="ingredient.count"
+              :value="ingredient.count"
               :max="MAX_REPETITIONS_OF_INGREDIENTS"
               :transferData="{ ...ingredient, count: ingredient.count + 1 }"
             />

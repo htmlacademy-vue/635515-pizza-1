@@ -3,7 +3,7 @@
     <span
       class="filling"
       :class="`filling--${internalName}`"
-      :draggable="isDraggable()"
+      :draggable="isDraggable"
       @dragstart.self="onDrag"
       @dragover.prevent
       @dragenter.prevent
@@ -19,16 +19,16 @@
         type="button"
         class="counter__button counter__button--minus"
         @click="handleDecrease"
-        :disabled="isDecreaseUnavailable()"
+        :disabled="isDecreaseUnavailable"
       >
         <span class="visually-hidden">Меньше</span>
       </button>
-      <input type="text" name="counter" class="counter__input" :value="count" />
+      <input type="text" name="counter" class="counter__input" :value="value" />
       <button
         type="button"
         class="counter__button counter__button--plus"
         @click="handleIncrease"
-        :disabled="isIncreaseUnavailable()"
+        :disabled="isIncreaseUnavailable"
       >
         <span class="visually-hidden">Больше</span>
       </button>
@@ -54,7 +54,7 @@ export default {
       type: String,
       required: true,
     },
-    count: {
+    value: {
       type: Number,
       required: true,
     },
@@ -67,6 +67,9 @@ export default {
       required: false,
     },
   },
+  data() {
+    return { count: this.value };
+  },
   watch: {
     count(newCount, oldCount) {
       this.$emit("change", {
@@ -76,7 +79,7 @@ export default {
       });
     },
   },
-  methods: {
+  computed: {
     isIncreaseUnavailable() {
       return this.max ? this.count >= this.max : false;
     },
@@ -84,13 +87,15 @@ export default {
       return this.count === 0;
     },
     isDraggable() {
-      return this.transferData !== undefined && !this.isIncreaseUnavailable();
+      return this.transferData !== undefined && !this.isIncreaseUnavailable;
     },
+  },
+  methods: {
     handleIncrease() {
-      this.count++;
+      this.count = this.value + 1;
     },
     handleDecrease() {
-      this.count--;
+      this.count = this.value - 1;
     },
     onDrag({ dataTransfer }) {
       if (!this.isDraggable) {
