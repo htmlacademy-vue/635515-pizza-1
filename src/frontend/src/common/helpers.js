@@ -13,11 +13,12 @@ export const extendIngredient = (ingredient) => {
   return {
     ...ingredient,
     internalName: regexResult.length > 1 ? regexResult[1] : "",
+    count: 0,
   };
 };
 
 export const hiddenError = (msg) => {
-  var console = console || {
+  var console = window.console || {
     error: function () {},
   };
   console.error(msg);

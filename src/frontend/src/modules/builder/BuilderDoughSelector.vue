@@ -20,8 +20,6 @@
 
 <script>
 import SelectorItem from "@/common/components/SelectorItem";
-import EventBus from "./EventBus";
-import EventsEnum from "./enums/events";
 import PositionTypes from "./enums/positionTypes";
 import { extendToType } from "@/common/helpers";
 
@@ -50,14 +48,14 @@ export default {
         const oldSelectedPosition = this.typedDough.filter(
           (item) => item.internalName === this.selectedItemValue
         )[0];
-        EventBus.$emit(EventsEnum.RemovePosition, { ...oldSelectedPosition });
+        this.$emit("onUnselect", { ...oldSelectedPosition });
       }
 
       this.selectedItemValue = value;
       const selectedPosition = this.typedDough.filter(
         (item) => item.internalName === value
       )[0];
-      EventBus.$emit(EventsEnum.AddPosition, { ...selectedPosition });
+      this.$emit("onSelect", { ...selectedPosition });
     },
   },
 };

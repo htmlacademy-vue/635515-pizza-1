@@ -67,24 +67,12 @@ export default {
       required: false,
     },
   },
-  data() {
-    return { count: this.value };
-  },
-  watch: {
-    count(newCount, oldCount) {
-      this.$emit("change", {
-        newCount,
-        oldCount,
-        internalName: this.internalName,
-      });
-    },
-  },
   computed: {
     isIncreaseUnavailable() {
-      return this.max ? this.count >= this.max : false;
+      return this.max ? this.value >= this.max : false;
     },
     isDecreaseUnavailable() {
-      return this.count === 0;
+      return this.value === 0;
     },
     isDraggable() {
       return this.transferData !== undefined && !this.isIncreaseUnavailable;
@@ -92,10 +80,18 @@ export default {
   },
   methods: {
     handleIncrease() {
-      this.count = this.value + 1;
+      this.$emit("change", {
+        newCount: this.value + 1,
+        oldCount: this.value,
+        internalName: this.internalName,
+      });
     },
     handleDecrease() {
-      this.count = this.value - 1;
+      this.$emit("change", {
+        newCount: this.value - 1,
+        oldCount: this.value,
+        internalName: this.internalName,
+      });
     },
     onDrag({ dataTransfer }) {
       if (!this.isDraggable) {

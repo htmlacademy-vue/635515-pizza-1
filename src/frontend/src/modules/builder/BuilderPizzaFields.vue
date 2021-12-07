@@ -1,36 +1,48 @@
 ﻿<template>
-  <label class="input">
-    <span class="visually-hidden">Название пиццы</span>
-    <input
-      required
-      type="text"
-      ref="inputPizzaName"
-      name="pizza_name"
-      :value="pizzaName"
-      @keyup="onChange"
-      @change="onChange"
-      placeholder="Введите название пиццы"
-    />
-  </label>
+  <div>
+    <label v-for="field in fields" :key="field.internalName" class="input">
+      <span class="visually-hidden">{{ field.displayName }}</span>
+      <input
+        :required="field.required"
+        type="text"
+        :name="field.internalName"
+        :value="field.value"
+        @keyup="onChange"
+        @change="onChange"
+        :placeholder="`Введите ${field.displayName.toLowerCase()}`"
+      />
+    </label>
+  </div>
 </template>
 
 <script>
-import EventBus from "./EventBus";
-import EventsEnum from "./enums/events";
+import { hiddenError } from "@/common/helpers";
 
 export default {
   name: "BuilderPizzaFields",
-  data() {
-    return { pizzaName: "" };
-  },
-  watch: {
-    pizzaName(newName) {
-      EventBus.$emit(EventsEnum.ChangeFields, { pizzaName: newName });
+  props: {
+    fields: {
+      type: Array,
+      required: true,
     },
   },
   methods: {
     onChange(ev) {
-      this.pizzaName = ev.target.value;
+      const { name, value } = ev.target;
+      const targetFields = this.fields.filter(
+        (field) => field.internalName === name
+      );
+      if (targetFields.length == 0) {
+        hiddenError(`We can't find fields by name "${name}" in the props`);
+        return;
+      }
+
+      const targetField = targetFields[0];
+      this.$emit("onChange", {
+        internalName: name,
+        newValue: value,
+        oldValue: targetField.value,
+      });
     },
   },
 };

@@ -13,17 +13,24 @@
 </template>
 
 <script>
-import EventBus from "./EventBus";
-import EventsEnum from "./enums/events";
-import CartEventBus from "./../cart/EventBus";
-import CartEventsEnum from "./../cart/enums/events";
-import { hiddenError, calculateAmount } from "@/common/helpers";
+// import EventBus from "./EventBus";
+// import EventsEnum from "./enums/events";
+// import CartEventBus from "./../cart/EventBus";
+// import CartEventsEnum from "./../cart/enums/events";
+import { calculateAmount } from "@/common/helpers";
 import PositionTypes from "./enums/positionTypes";
 
 export default {
   name: "BuilderPriceCounter",
-  data() {
-    return { positions: [], pizzaName: "" };
+  props: {
+    positions: {
+      type: Array,
+      required: true,
+    },
+    metadata: {
+      type: Array,
+      required: true,
+    },
   },
   computed: {
     ingredients() {
@@ -52,6 +59,13 @@ export default {
       }
       return calculateAmount(this.positions);
     },
+    isRequiredFieldsHaveValues() {
+      const requiredFields = this.metadata.filter((field) => field.required);
+      return (
+        requiredFields.length === 0 ||
+        requiredFields.filter((field) => field.value === "").length === 0
+      );
+    },
   },
   methods: {
     isSubmitUnavailable() {
@@ -59,48 +73,12 @@ export default {
         this.sauces.length === 0 ||
         this.sizes.length === 0 ||
         this.doughOptions.length === 0 ||
-        this.pizzaName === ""
+        !this.isRequiredFieldsHaveValues
       );
-    },
-    addPosition(position) {
-      if (!("price" in position || "multiplier" in position)) {
-        hiddenError(
-          `Event "${EventsEnum.AddPosition}" passed an object with the wrong structure. The object must contain a price or multiplier field.`
-        );
-        return;
-      }
-      this.positions.push(position);
-    },
-    removePosition(position) {
-      const findedPositions = this.positions.filter(
-        (item) => item.internalName === position.internalName
-      );
-      if (findedPositions.length === 0) {
-        hiddenError(
-          `Event "${EventsEnum.RemovePosition}" passed an wrong object. The collection has no such object.`
-        );
-        return;
-      }
-      const index = this.positions.indexOf(findedPositions[0]);
-      if (index !== -1) {
-        this.positions.splice(index, 1);
-      }
     },
     onSubmit() {
-      CartEventBus.$emit(CartEventsEnum.AddToCart, {
-        name: this.pizzaName,
-        positions: this.positions.slice(),
-      });
+      this.$emit("submit");
     },
-    changeFields(fields) {
-      const { pizzaName } = fields;
-      this.pizzaName = pizzaName;
-    },
-  },
-  mounted() {
-    EventBus.$on(EventsEnum.AddPosition, this.addPosition);
-    EventBus.$on(EventsEnum.RemovePosition, this.removePosition);
-    EventBus.$on(EventsEnum.ChangeFields, this.changeFields);
   },
 };
 </script>

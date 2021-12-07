@@ -72,7 +72,6 @@ export default {
       extendedIngredients: this.ingredients.map((ingredient) => ({
         ...ingredient,
         type: PositionTypes.Ingredient,
-        count: 0,
       })),
     };
   },
@@ -89,14 +88,14 @@ export default {
   watch: {
     addedIngredients(newArray, oldArray) {
       oldArray.forEach((oldItem) => {
-        EventBus.$emit(EventsEnum.RemovePosition, {
+        this.$emit("onUnselect", {
           ...oldItem,
           price: oldItem.price * oldItem.count,
         });
       });
 
       newArray.forEach((newItem) => {
-        EventBus.$emit(EventsEnum.AddPosition, {
+        this.$emit("onSelect", {
           ...newItem,
           price: newItem.price * newItem.count,
         });
@@ -110,14 +109,14 @@ export default {
         const oldSelectedPosition = this.typedSauces.filter(
           (item) => item.internalName === this.selectedItemValue
         )[0];
-        EventBus.$emit(EventsEnum.RemovePosition, { ...oldSelectedPosition });
+        this.$emit("onUnselect", { ...oldSelectedPosition });
       }
 
       this.selectedItemValue = value;
       const selectedPosition = this.typedSauces.filter(
         (item) => item.internalName === value
       )[0];
-      EventBus.$emit(EventsEnum.AddPosition, { ...selectedPosition });
+      this.$emit("onSelect", { ...selectedPosition });
     },
     handleCounterChanged(value) {
       const ingredientsByName = this.extendedIngredients.filter(
