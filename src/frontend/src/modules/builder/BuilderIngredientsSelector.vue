@@ -65,6 +65,7 @@ export default {
       required: true,
     },
   },
+  // TODO: Прокинуть ингредиенты старшему родителю, тогда и drag-and-drop возможно заработает и корректные данные будут в Index по наборам ингредиентов
   data() {
     return {
       MAX_REPETITIONS_OF_INGREDIENTS,
@@ -129,15 +130,6 @@ export default {
         return;
       }
       ingredientsByName[0].count = value.newCount;
-    },
-    initCoutns(ingredients) {
-      let ret = {};
-      ingredients.forEach((ingredient) => {
-        ret[ingredient.internalName] = {
-          price: ingredient.price,
-          count: 0,
-        };
-      });
     },
   },
   mounted() {

@@ -24,17 +24,6 @@ export const hiddenError = (msg) => {
   console.error(msg);
 };
 
-export const initCoutns = (ingredients) => {
-  let ret = {};
-  ingredients.forEach((ingredient) => {
-    ret[ingredient.internalName] = {
-      price: ingredient.price,
-      count: 0,
-    };
-  });
-  return ret;
-};
-
 export const extendToType = (item, type) => {
   return { ...item, type };
 };
