@@ -1,4 +1,6 @@
-﻿export const extendDough = (dough) => {
+﻿import PositionTypes from "@/common/enums/positionTypes";
+
+export const extendDough = (dough) => {
   const { image } = dough;
   const regexResult = /dough-(\w*).svg/.exec(image);
   return {
@@ -14,6 +16,7 @@ export const extendIngredient = (ingredient) => {
     ...ingredient,
     internalName: regexResult.length > 1 ? regexResult[1] : "",
     count: 0,
+    type: PositionTypes.Ingredient,
   };
 };
 

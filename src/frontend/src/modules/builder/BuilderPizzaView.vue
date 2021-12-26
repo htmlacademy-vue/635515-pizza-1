@@ -30,9 +30,7 @@
 
 <script>
 import AppDrop from "@/common/components/AppDrop";
-import EventBus from "./EventBus";
-import EventsEnum from "./enums/events";
-import PositionTypes from "./enums/positionTypes";
+import PositionTypes from "@/common/enums/positionTypes";
 import Repeats from "./enums/repeats";
 
 export default {
@@ -74,8 +72,7 @@ export default {
   methods: {
     dropPosition(position) {
       if (position.type === PositionTypes.Ingredient) {
-        // this.$emit("onDropIngredient", position);
-        EventBus.$emit(EventsEnum.ControlValue, position);
+        this.$emit("onDropIngredient", position);
       }
     },
   },

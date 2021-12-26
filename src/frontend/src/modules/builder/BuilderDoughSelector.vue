@@ -20,7 +20,7 @@
 
 <script>
 import SelectorItem from "@/common/components/SelectorItem";
-import PositionTypes from "./enums/positionTypes";
+import PositionTypes from "@/common/enums/positionTypes";
 import { extendToType } from "@/common/helpers";
 
 export default {

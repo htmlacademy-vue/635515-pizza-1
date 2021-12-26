@@ -23,7 +23,7 @@
 
           <ul class="ingredients__list">
             <ItemCounter
-              v-for="ingredient in extendedIngredients"
+              v-for="ingredient in ingredients"
               :key="ingredient.id"
               nameOfTheSelectable="ingredients"
               @change="handleCounterChanged"
@@ -43,10 +43,8 @@
 <script>
 import RadioButton from "@/common/components/RadioButton";
 import ItemCounter from "@/common/components/ItemCounter";
-import EventBus from "./EventBus";
-import EventsEnum from "./enums/events";
-import PositionTypes from "./enums/positionTypes";
-import { hiddenError, extendToType } from "@/common/helpers";
+import PositionTypes from "@/common/enums/positionTypes";
+import { extendToType } from "@/common/helpers";
 import { MAX_REPETITIONS_OF_INGREDIENTS } from "@/common/constants";
 
 export default {
@@ -65,47 +63,19 @@ export default {
       required: true,
     },
   },
-  // TODO: Прокинуть ингредиенты старшему родителю, тогда и drag-and-drop возможно заработает и корректные данные будут в Index по наборам ингредиентов
   data() {
     return {
       MAX_REPETITIONS_OF_INGREDIENTS,
       selectedItemValue: "",
-      extendedIngredients: this.ingredients.map((ingredient) => ({
-        ...ingredient,
-        type: PositionTypes.Ingredient,
-      })),
     };
   },
   computed: {
-    addedIngredients() {
-      return this.extendedIngredients
-        .filter((ingredient) => ingredient.count > 0)
-        .slice();
-    },
     typedSauces() {
       return this.sauces.map((item) => extendToType(item, PositionTypes.Sauce));
     },
   },
-  watch: {
-    addedIngredients(newArray, oldArray) {
-      oldArray.forEach((oldItem) => {
-        this.$emit("onUnselect", {
-          ...oldItem,
-          price: oldItem.price * oldItem.count,
-        });
-      });
-
-      newArray.forEach((newItem) => {
-        this.$emit("onSelect", {
-          ...newItem,
-          price: newItem.price * newItem.count,
-        });
-      });
-    },
-  },
   methods: {
     selectItem(value) {
-      // const type = PositionTypes.Sauce;
       if (this.selectedItemValue !== "") {
         const oldSelectedPosition = this.typedSauces.filter(
           (item) => item.internalName === this.selectedItemValue
@@ -120,25 +90,8 @@ export default {
       this.$emit("onSelect", { ...selectedPosition });
     },
     handleCounterChanged(value) {
-      const ingredientsByName = this.extendedIngredients.filter(
-        (ingredient) => ingredient.internalName === value.internalName
-      );
-      if (ingredientsByName.length === 0) {
-        hiddenError(
-          `Collections crash. Can't find element with internal name "${value.internalName}".`
-        );
-        return;
-      }
-      ingredientsByName[0].count = value.newCount;
+      this.$emit("counterChanged", value);
     },
-  },
-  mounted() {
-    EventBus.$on(EventsEnum.ControlValue, (position) => {
-      this.handleCounterChanged({
-        newCount: position.count,
-        internalName: position.internalName,
-      });
-    });
   },
 };
 </script>

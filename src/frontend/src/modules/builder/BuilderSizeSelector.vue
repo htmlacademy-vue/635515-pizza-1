@@ -19,9 +19,7 @@
 
 <script>
 import SelectorItem from "@/common/components/SelectorItem";
-// import EventBus from "./EventBus";
-// import EventsEnum from "./enums/events";
-import PositionTypes from "./enums/positionTypes";
+import PositionTypes from "@/common/enums/positionTypes";
 import { extendToType } from "@/common/helpers";
 
 export default {
@@ -48,7 +46,6 @@ export default {
           (item) => item.internalName === this.selectedItemValue
         )[0];
         this.$emit("onUnselect", { ...oldSelectedPosition });
-        // EventBus.$emit(EventsEnum.RemovePosition, { ...oldSelectedPosition });
       }
 
       this.selectedItemValue = value;
@@ -56,7 +53,6 @@ export default {
         (item) => item.internalName === value
       )[0];
       this.$emit("onSelect", { ...selectedPosition });
-      // EventBus.$emit(EventsEnum.AddPosition, { ...selectedPosition });
     },
   },
 };

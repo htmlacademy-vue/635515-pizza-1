@@ -13,12 +13,10 @@
 </template>
 
 <script>
-// import EventBus from "./EventBus";
-// import EventsEnum from "./enums/events";
 // import CartEventBus from "./../cart/EventBus";
 // import CartEventsEnum from "./../cart/enums/events";
 import { calculateAmount } from "@/common/helpers";
-import PositionTypes from "./enums/positionTypes";
+import PositionTypes from "@/common/enums/positionTypes";
 
 export default {
   name: "BuilderPriceCounter",

@@ -1,6 +1,6 @@
 ﻿export default {
-  AddPosition: "AddPosition",
-  RemovePosition: "RemovePosition",
+  // AddPosition: "AddPosition",
+  // RemovePosition: "RemovePosition",
   ControlValue: "ControlValue",
   ChangeFields: "ChangeFields",
 };

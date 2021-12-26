@@ -21,6 +21,7 @@
               :ingredients="ingredients"
               @onSelect="addPosition"
               @onUnselect="removePosition"
+              @counterChanged="handleIngredientsCounterChanged"
             />
 
             <div class="content__pizza">
@@ -29,12 +30,18 @@
                 @onChange="changeMetadataHandler"
               />
 
-              <BuilderPizzaView :positions="ingredientsSet.positions" />
+              <BuilderPizzaView
+                :positions="ingredientsSet.positions"
+                @onDropIngredient="handleDropIngredient"
+              />
               <BuilderPriceCounter
                 :positions="ingredientsSet.positions"
                 :metadata="ingredientsSet.metadata"
                 @submit="submitHandler"
               />
+              <button type="button" class="button" @click="reset">
+                Сбросить
+              </button>
             </div>
           </div>
         </form>
@@ -106,6 +113,30 @@ export default {
       },
     };
   },
+  computed: {
+    addedIngredients() {
+      return this.ingredients
+        .filter((ingredient) => ingredient.count > 0)
+        .slice();
+    },
+  },
+  watch: {
+    addedIngredients(newArray, oldArray) {
+      oldArray.forEach((oldItem) => {
+        this.removePosition({
+          ...oldItem,
+          price: oldItem.price * oldItem.count,
+        });
+      });
+
+      newArray.forEach((newItem) => {
+        this.addPosition({
+          ...newItem,
+          price: newItem.price * newItem.count,
+        });
+      });
+    },
+  },
   methods: {
     addPosition(position) {
       if (!("price" in position || "multiplier" in position)) {
@@ -132,6 +163,11 @@ export default {
         positions.splice(index, 1);
       }
     },
+    reset() {
+      this.ingredients.forEach((ingredient) => {
+        ingredient.count = 0;
+      });
+    },
     changeMetadataHandler(changedValue) {
       const { internalName, newValue } = changedValue;
       const targetFields = this.ingredientsSet.metadata.filter(
@@ -148,6 +184,24 @@ export default {
     },
     submitHandler() {
       CartEventBus.$emit(CartEventsEnum.AddToCart, this.ingredientsSet);
+    },
+    handleIngredientsCounterChanged(value) {
+      const ingredientsByName = this.ingredients.filter(
+        (ingredient) => ingredient.internalName === value.internalName
+      );
+      if (ingredientsByName.length === 0) {
+        hiddenError(
+          `Collections crash. Can't find element with internal name "${value.internalName}".`
+        );
+        return;
+      }
+      ingredientsByName[0].count = value.newCount;
+    },
+    handleDropIngredient(position) {
+      this.handleIngredientsCounterChanged({
+        newCount: position.count,
+        internalName: position.internalName,
+      });
     },
   },
 };
