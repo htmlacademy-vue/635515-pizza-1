@@ -20,8 +20,6 @@
 
 <script>
 import SelectorItem from "@/common/components/SelectorItem";
-import PositionTypes from "@/common/enums/positionTypes";
-import { extendToType } from "@/common/helpers";
 
 export default {
   name: "BuilderDoughSelector",
@@ -31,31 +29,14 @@ export default {
       type: Array,
       required: true,
     },
-  },
-  data() {
-    return { selectedItemValue: "" };
-  },
-  computed: {
-    typedDough() {
-      return this.doughOptions.map((item) =>
-        extendToType(item, PositionTypes.Dough)
-      );
+    selectedItemValue: {
+      type: String,
+      required: true,
     },
   },
   methods: {
     selectItem(value) {
-      if (this.selectedItemValue !== "") {
-        const oldSelectedPosition = this.typedDough.filter(
-          (item) => item.internalName === this.selectedItemValue
-        )[0];
-        this.$emit("onUnselect", { ...oldSelectedPosition });
-      }
-
-      this.selectedItemValue = value;
-      const selectedPosition = this.typedDough.filter(
-        (item) => item.internalName === value
-      )[0];
-      this.$emit("onSelect", { ...selectedPosition });
+      this.$emit("onSelect", value);
     },
   },
 };
