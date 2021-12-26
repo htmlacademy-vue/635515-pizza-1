@@ -5,6 +5,7 @@ export const extendDough = (dough) => {
   const regexResult = /dough-(\w*).svg/.exec(image);
   return {
     ...dough,
+    type: PositionTypes.Dough,
     internalName: regexResult.length > 1 ? regexResult[1] : "",
   };
 };

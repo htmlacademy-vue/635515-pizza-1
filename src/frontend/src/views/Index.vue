@@ -8,8 +8,8 @@
 
             <BuilderDoughSelector
               :doughOptions="doughOptions"
-              @onSelect="addPosition"
-              @onUnselect="removePosition"
+              :selectedItemValue="selectedDough"
+              @onSelect="handleSelectDough"
             />
             <BuilderSizeSelector
               :sizes="sizes"
@@ -70,6 +70,8 @@ import BuilderPizzaFields from "@/modules/builder/BuilderPizzaFields";
 import CartEventBus from "@/modules/cart/EventBus";
 import CartEventsEnum from "@/modules/cart/enums/events";
 
+import PositionTypes from "@/common/enums/positionTypes";
+
 import { hiddenError } from "@/common/helpers";
 
 export default {
@@ -118,6 +120,16 @@ export default {
       return this.ingredients
         .filter((ingredient) => ingredient.count > 0)
         .slice();
+    },
+    selectedDough() {
+      const dough = this.ingredientsSet.positions.filter(
+        (pos) => pos.type === PositionTypes.Dough
+      );
+      if (dough.length === 0) {
+        return "";
+      } else {
+        return dough[0].internalName;
+      }
     },
   },
   watch: {
@@ -184,6 +196,19 @@ export default {
     },
     submitHandler() {
       CartEventBus.$emit(CartEventsEnum.AddToCart, this.ingredientsSet);
+    },
+    handleSelectDough(value) {
+      if (this.selectedItemValue !== "") {
+        const oldSelectedPosition = this.doughOptions.filter(
+          (item) => item.internalName === this.selectedDough
+        )[0];
+        this.removePosition({ ...oldSelectedPosition });
+      }
+
+      const selectedPosition = this.doughOptions.filter(
+        (item) => item.internalName === value
+      )[0];
+      this.addPosition({ ...selectedPosition });
     },
     handleIngredientsCounterChanged(value) {
       const ingredientsByName = this.ingredients.filter(
