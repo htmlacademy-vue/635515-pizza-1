@@ -41,10 +41,12 @@
 }
 
 .content__constructor {
+  position: relative;
   width: 315px;
   margin-top: 25px;
   margin-right: auto;
   margin-left: auto;
+  min-height: 315px;
 }
 
 .content__result {
