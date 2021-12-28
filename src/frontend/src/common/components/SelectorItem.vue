@@ -10,7 +10,7 @@
       :name="nameOfTheSelectable"
       :value="value"
       :checked="checked"
-      @change="handleChange"
+      @change="$emit('selectItem', value)"
       class="visually-hidden"
     />
     <b v-if="description">{{ label }}</b>
@@ -39,11 +39,6 @@ export default {
     },
     checked: {
       type: Boolean,
-    },
-  },
-  methods: {
-    handleChange() {
-      this.$emit("selectItem", this.value);
     },
   },
 };

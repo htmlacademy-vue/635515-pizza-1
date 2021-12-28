@@ -11,7 +11,7 @@
           :label="size.name"
           :value="size.internalName"
           :checked="size.internalName === selectedItemValue"
-          @selectItem="selectItem"
+          @selectItem="$emit('onSelect', $event)"
         />
       </div>
     </div>
@@ -20,8 +20,6 @@
 
 <script>
 import SelectorItem from "@/common/components/SelectorItem";
-import PositionTypes from "@/common/enums/positionTypes";
-import { extendToType } from "@/common/helpers";
 
 export default {
   name: "BuilderSizeSelector",
@@ -34,16 +32,6 @@ export default {
     selectedItemValue: {
       type: String,
       required: true,
-    },
-  },
-  computed: {
-    typedSizes() {
-      return this.sizes.map((item) => extendToType(item, PositionTypes.Size));
-    },
-  },
-  methods: {
-    selectItem(value) {
-      this.$emit("onSelect", value);
     },
   },
 };

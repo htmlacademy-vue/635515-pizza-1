@@ -12,7 +12,7 @@
           :label="dough.name"
           :value="dough.internalName"
           :description="dough.description"
-          @selectItem="selectItem"
+          @selectItem="$emit('onSelect', $event)"
         />
       </div>
     </div>
@@ -33,11 +33,6 @@ export default {
     selectedItemValue: {
       type: String,
       required: true,
-    },
-  },
-  methods: {
-    selectItem(value) {
-      this.$emit("onSelect", value);
     },
   },
 };

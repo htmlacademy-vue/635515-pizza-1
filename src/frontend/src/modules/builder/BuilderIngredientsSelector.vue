@@ -15,7 +15,7 @@
             :label="sauce.name"
             :value="sauce.internalName"
             :checked="sauce.internalName === selectedItemValue"
-            @selectItem="selectItem"
+            @selectItem="$emit('onSelect', $event)"
           />
         </div>
 
@@ -27,7 +27,7 @@
               v-for="ingredient in ingredients"
               :key="ingredient.id"
               nameOfTheSelectable="ingredients"
-              @change="handleCounterChanged"
+              @change="$emit('counterChanged', $event)"
               :label="ingredient.name"
               :internalName="ingredient.internalName"
               :value="ingredient.count"
@@ -44,8 +44,6 @@
 <script>
 import RadioButton from "@/common/components/RadioButton";
 import ItemCounter from "@/common/components/ItemCounter";
-import PositionTypes from "@/common/enums/positionTypes";
-import { extendToType } from "@/common/helpers";
 import { MAX_REPETITIONS_OF_INGREDIENTS } from "@/common/constants";
 
 export default {
@@ -71,33 +69,7 @@ export default {
   data() {
     return {
       MAX_REPETITIONS_OF_INGREDIENTS,
-      // selectedItemValue: "",
     };
-  },
-  computed: {
-    typedSauces() {
-      return this.sauces.map((item) => extendToType(item, PositionTypes.Sauce));
-    },
-  },
-  methods: {
-    selectItem(value) {
-      this.$emit("onSelect", value);
-      // if (this.selectedItemValue !== "") {
-      //   const oldSelectedPosition = this.typedSauces.filter(
-      //     (item) => item.internalName === this.selectedItemValue
-      //   )[0];
-      //   this.$emit("onUnselect", { ...oldSelectedPosition });
-      // }
-
-      // this.selectedItemValue = value;
-      // const selectedPosition = this.typedSauces.filter(
-      //   (item) => item.internalName === value
-      // )[0];
-      // this.$emit("onSelect", { ...selectedPosition });
-    },
-    handleCounterChanged(value) {
-      this.$emit("counterChanged", value);
-    },
   },
 };
 </script>

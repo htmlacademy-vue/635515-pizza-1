@@ -5,7 +5,7 @@
       type="button"
       class="button"
       :disabled="isSubmitUnavailable()"
-      @click="onSubmit"
+      @click="$emit('submit')"
     >
       Готовьте!
     </button>
@@ -13,8 +13,6 @@
 </template>
 
 <script>
-// import CartEventBus from "./../cart/EventBus";
-// import CartEventsEnum from "./../cart/enums/events";
 import { calculateAmount } from "@/common/helpers";
 import PositionTypes from "@/common/enums/positionTypes";
 
@@ -73,9 +71,6 @@ export default {
         this.doughOptions.length === 0 ||
         !this.isRequiredFieldsHaveValues
       );
-    },
-    onSubmit() {
-      this.$emit("submit");
     },
   },
 };
