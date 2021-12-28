@@ -9,6 +9,7 @@
       type="radio"
       :name="nameOfTheSelectable"
       :value="value"
+      :checked="checked"
       @change="handleChange"
       class="visually-hidden"
     />
@@ -35,6 +36,9 @@ export default {
     },
     description: {
       type: String,
+    },
+    checked: {
+      type: Boolean,
     },
   },
   methods: {

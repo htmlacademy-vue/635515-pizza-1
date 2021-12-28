@@ -13,8 +13,8 @@
             />
             <BuilderSizeSelector
               :sizes="sizes"
-              @onSelect="addPosition"
-              @onUnselect="removePosition"
+              :selectedItemValue="selectedSize"
+              @onSelect="handleSelectSize"
             />
             <BuilderIngredientsSelector
               :sauces="sauces"
@@ -93,10 +93,12 @@ export default {
       sauces: pizza.sauces.map((sauce) => ({
         ...sauce,
         internalName: SauceNames[sauce.name],
+        type: PositionTypes.Sauce,
       })),
       sizes: pizza.sizes.map((size) => ({
         ...size,
         internalName: SizeNames[size.multiplier],
+        type: PositionTypes.Size,
       })),
       ingredients: pizza.ingredients.map((ingredient) =>
         extendIngredient(ingredient)
@@ -129,6 +131,16 @@ export default {
         return "";
       } else {
         return dough[0].internalName;
+      }
+    },
+    selectedSize() {
+      const sizes = this.ingredientsSet.positions.filter(
+        (pos) => pos.type === PositionTypes.Size
+      );
+      if (sizes.length === 0) {
+        return "";
+      } else {
+        return sizes[0].internalName;
       }
     },
   },
@@ -166,7 +178,7 @@ export default {
       );
       if (findedPositions.length === 0) {
         hiddenError(
-          `Event RemovePosition passed an wrong object. The collection has no such object.`
+          `Event RemovePosition passed an wrong object. The collection has no such object. Internal name ${position.internalName}`
         );
         return;
       }
@@ -179,6 +191,8 @@ export default {
       this.ingredients.forEach((ingredient) => {
         ingredient.count = 0;
       });
+      const { positions } = this.ingredientsSet;
+      positions.splice(0, positions.length);
     },
     changeMetadataHandler(changedValue) {
       const { internalName, newValue } = changedValue;
@@ -198,7 +212,7 @@ export default {
       CartEventBus.$emit(CartEventsEnum.AddToCart, this.ingredientsSet);
     },
     handleSelectDough(value) {
-      if (this.selectedItemValue !== "") {
+      if (this.selectedDough !== "") {
         const oldSelectedPosition = this.doughOptions.filter(
           (item) => item.internalName === this.selectedDough
         )[0];
@@ -206,6 +220,19 @@ export default {
       }
 
       const selectedPosition = this.doughOptions.filter(
+        (item) => item.internalName === value
+      )[0];
+      this.addPosition({ ...selectedPosition });
+    },
+    handleSelectSize(value) {
+      if (this.selectedSize !== "") {
+        const oldSelectedPosition = this.sizes.filter(
+          (item) => item.internalName === this.selectedSize
+        )[0];
+        this.removePosition({ ...oldSelectedPosition });
+      }
+
+      const selectedPosition = this.sizes.filter(
         (item) => item.internalName === value
       )[0];
       this.addPosition({ ...selectedPosition });

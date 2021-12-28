@@ -10,6 +10,7 @@
           nameOfTheSelectable="diameter"
           :label="size.name"
           :value="size.internalName"
+          :checked="size.internalName === selectedItemValue"
           @selectItem="selectItem"
         />
       </div>
@@ -30,29 +31,19 @@ export default {
       type: Array,
       required: true,
     },
+    selectedItemValue: {
+      type: String,
+      required: true,
+    },
   },
   computed: {
     typedSizes() {
       return this.sizes.map((item) => extendToType(item, PositionTypes.Size));
     },
   },
-  data() {
-    return { selectedItemValue: "" };
-  },
   methods: {
     selectItem(value) {
-      if (this.selectedItemValue !== "") {
-        const oldSelectedPosition = this.typedSizes.filter(
-          (item) => item.internalName === this.selectedItemValue
-        )[0];
-        this.$emit("onUnselect", { ...oldSelectedPosition });
-      }
-
-      this.selectedItemValue = value;
-      const selectedPosition = this.typedSizes.filter(
-        (item) => item.internalName === value
-      )[0];
-      this.$emit("onSelect", { ...selectedPosition });
+      this.$emit("onSelect", value);
     },
   },
 };
