@@ -14,6 +14,7 @@
             nameOfTheSelectable="sauce"
             :label="sauce.name"
             :value="sauce.internalName"
+            :checked="sauce.internalName === selectedItemValue"
             @selectItem="selectItem"
           />
         </div>
@@ -58,6 +59,10 @@ export default {
       type: Array,
       required: true,
     },
+    selectedItemValue: {
+      type: String,
+      required: true,
+    },
     ingredients: {
       type: Array,
       required: true,
@@ -66,7 +71,7 @@ export default {
   data() {
     return {
       MAX_REPETITIONS_OF_INGREDIENTS,
-      selectedItemValue: "",
+      // selectedItemValue: "",
     };
   },
   computed: {
@@ -76,18 +81,19 @@ export default {
   },
   methods: {
     selectItem(value) {
-      if (this.selectedItemValue !== "") {
-        const oldSelectedPosition = this.typedSauces.filter(
-          (item) => item.internalName === this.selectedItemValue
-        )[0];
-        this.$emit("onUnselect", { ...oldSelectedPosition });
-      }
+      this.$emit("onSelect", value);
+      // if (this.selectedItemValue !== "") {
+      //   const oldSelectedPosition = this.typedSauces.filter(
+      //     (item) => item.internalName === this.selectedItemValue
+      //   )[0];
+      //   this.$emit("onUnselect", { ...oldSelectedPosition });
+      // }
 
-      this.selectedItemValue = value;
-      const selectedPosition = this.typedSauces.filter(
-        (item) => item.internalName === value
-      )[0];
-      this.$emit("onSelect", { ...selectedPosition });
+      // this.selectedItemValue = value;
+      // const selectedPosition = this.typedSauces.filter(
+      //   (item) => item.internalName === value
+      // )[0];
+      // this.$emit("onSelect", { ...selectedPosition });
     },
     handleCounterChanged(value) {
       this.$emit("counterChanged", value);

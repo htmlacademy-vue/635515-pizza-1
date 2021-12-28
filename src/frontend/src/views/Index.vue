@@ -19,8 +19,8 @@
             <BuilderIngredientsSelector
               :sauces="sauces"
               :ingredients="ingredients"
-              @onSelect="addPosition"
-              @onUnselect="removePosition"
+              :selectedItemValue="selectedSauce"
+              @onSelect="handleSelectSauce"
               @counterChanged="handleIngredientsCounterChanged"
             />
 
@@ -143,6 +143,16 @@ export default {
         return sizes[0].internalName;
       }
     },
+    selectedSauce() {
+      const sauces = this.ingredientsSet.positions.filter(
+        (pos) => pos.type === PositionTypes.Sauce
+      );
+      if (sauces.length === 0) {
+        return "";
+      } else {
+        return sauces[0].internalName;
+      }
+    },
   },
   watch: {
     addedIngredients(newArray, oldArray) {
@@ -233,6 +243,19 @@ export default {
       }
 
       const selectedPosition = this.sizes.filter(
+        (item) => item.internalName === value
+      )[0];
+      this.addPosition({ ...selectedPosition });
+    },
+    handleSelectSauce(value) {
+      if (this.selectedSauce !== "") {
+        const oldSelectedPosition = this.sauces.filter(
+          (item) => item.internalName === this.selectedSauce
+        )[0];
+        this.removePosition({ ...oldSelectedPosition });
+      }
+
+      const selectedPosition = this.sauces.filter(
         (item) => item.internalName === value
       )[0];
       this.addPosition({ ...selectedPosition });

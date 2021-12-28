@@ -4,6 +4,7 @@
       type="radio"
       :name="nameOfTheSelectable"
       :value="value"
+      :checked="checked"
       @change="handleChange"
     />
     <span>{{ label }}</span>
@@ -24,6 +25,9 @@ export default {
     value: {
       type: String,
       required: true,
+    },
+    checked: {
+      type: Boolean,
     },
   },
   methods: {
