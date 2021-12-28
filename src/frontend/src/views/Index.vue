@@ -39,9 +39,9 @@
                 :metadata="ingredientsSet.metadata"
                 @submit="submitHandler"
               />
-              <button type="button" class="button" @click="reset">
+              <!-- <button type="button" class="button" @click="reset">
                 Сбросить
-              </button>
+              </button> -->
             </div>
           </div>
         </form>
@@ -201,6 +201,9 @@ export default {
       this.ingredients.forEach((ingredient) => {
         ingredient.count = 0;
       });
+      this.ingredientsSet.metadata.forEach((field) => {
+        field.value = "";
+      });
       const { positions } = this.ingredientsSet;
       positions.splice(0, positions.length);
     },
@@ -219,7 +222,11 @@ export default {
       targetField.value = newValue;
     },
     submitHandler() {
-      CartEventBus.$emit(CartEventsEnum.AddToCart, this.ingredientsSet);
+      CartEventBus.$emit(CartEventsEnum.AddToCart, {
+        positions: [...this.ingredientsSet.positions],
+        metadata: [...this.ingredientsSet.metadata],
+      });
+      this.reset();
     },
     handleSelectDough(value) {
       if (this.selectedDough !== "") {

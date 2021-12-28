@@ -26,6 +26,7 @@ export default {
   },
   methods: {
     addPizza(newPizza) {
+      console.log(newPizza);
       this.pizza.push(newPizza);
     },
   },
