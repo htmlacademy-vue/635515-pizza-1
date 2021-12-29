@@ -1,32 +1,24 @@
 ﻿<template>
-  <div id="app">
-    <header class="header">
-      <div class="header__logo">
-        <a href="index.html" class="logo">
-          <img
-            src="~@/assets/img/logo.svg"
-            alt="V!U!E! Pizza logo"
-            width="90"
-            height="40"
-          />
-        </a>
-      </div>
-      <HeaderCart />
-      <div class="header__user">
-        <a href="#" class="header__login"><span>Войти</span></a>
-      </div>
-    </header>
+  <component :is="layout">
     <slot />
-  </div>
+  </component>
 </template>
 
 <script>
-import HeaderCart from "../modules/cart/HeaderCart.vue";
+const defaultLayout = "AppLayoutDefault";
 
 export default {
   name: "AppLayout",
-  components: { HeaderCart },
+  props: {},
+  computed: {
+    layout() {
+      const layout = this.$route.meta.layout || defaultLayout;
+      return () => import(`@/layouts/${layout}.vue`);
+    },
+
+    layoutTasks() {
+      return this.$route.meta.layout !== defaultLayout ? this.tasks : null;
+    },
+  },
 };
 </script>
-
-<style></style>
