@@ -15,9 +15,11 @@
       <a
         class="header__login"
         @click="
-          $router.push({
-            name: 'Login',
-          })
+          if ($route.name !== 'Login') {
+            $router.push({
+              name: 'Login',
+            });
+          }
         "
         ><span>Войти</span></a
       >

@@ -15,10 +15,6 @@ export default {
       const layout = this.$route.meta.layout || defaultLayout;
       return () => import(`@/layouts/${layout}.vue`);
     },
-
-    layoutTasks() {
-      return this.$route.meta.layout !== defaultLayout ? this.tasks : null;
-    },
   },
 };
 </script>
