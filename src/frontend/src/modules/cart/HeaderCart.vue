@@ -1,6 +1,13 @@
 ﻿<template>
   <div class="header__cart">
-    <a href="#">{{ amount }} ₽</a>
+    <a
+      @click="
+        $router.push({
+          name: 'Cart',
+        })
+      "
+      >{{ amount }} ₽</a
+    >
   </div>
 </template>
 

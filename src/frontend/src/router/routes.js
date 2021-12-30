@@ -1,7 +1,7 @@
 ﻿export default [
   {
     path: "/",
-    name: "IndexHome",
+    name: "Home",
     component: () => import("../views/Index.vue"),
   },
   {
@@ -12,11 +12,13 @@
   {
     path: "/orders",
     name: "Orders",
+    meta: { layout: "AppLayoutCabinet" },
     component: () => import("../views/Orders.vue"),
   },
   {
     path: "/profile",
     name: "Profile",
+    meta: { layout: "AppLayoutCabinet" },
     component: () => import("../views/Profile.vue"),
   },
   {
