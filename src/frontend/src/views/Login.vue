@@ -1,16 +1,11 @@
 ﻿<template>
   <div class="shadow">
     <div class="sign-form">
-      <a
-        @click="
-          $router.push({
-            name: 'Home',
-          })
-        "
-        class="close close--white"
+      <router-link class="close close--white" :to="{ name: 'Home' }"
+        ><span class="visually-hidden"
+          >Закрыть форму авторизации</span
+        ></router-link
       >
-        <span class="visually-hidden">Закрыть форму авторизации</span>
-      </a>
       <div class="sign-form__title">
         <h1 class="title title--small">Авторизуйтесь на сайте</h1>
       </div>

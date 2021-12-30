@@ -299,14 +299,10 @@
       </main>
       <section class="footer">
         <div class="footer__more">
-          <a
-            @click="
-              $router.push({
-                name: 'Home',
-              })
-            "
+          <router-link
+            :to="{ name: 'Home' }"
             class="button button--border button--arrow"
-            >Хочу еще одну</a
+            >Хочу еще одну</router-link
           >
         </div>
         <p class="footer__text">

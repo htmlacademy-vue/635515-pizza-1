@@ -12,16 +12,12 @@
     </div>
     <HeaderCart />
     <div class="header__user">
-      <a
+      <router-link
         class="header__login"
-        @click="
-          if ($route.name !== 'Login') {
-            $router.push({
-              name: 'Login',
-            });
-          }
-        "
-        ><span>Войти</span></a
+        :to="{
+          name: 'Login',
+        }"
+        ><span>Войти</span></router-link
       >
     </div>
   </header>

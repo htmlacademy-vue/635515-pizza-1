@@ -9,17 +9,15 @@
       />
     </a>
 
-    <a
+    <router-link
       v-for="link in navLinks"
       :key="link.routeName"
       class="layout__link"
       :class="{ 'layout__link--active': link.routeName === $route.name }"
-      @click="
-        $router.push({
-          name: link.routeName,
-        })
-      "
-      >{{ link.displayName }}</a
+      :to="{
+        name: link.routeName,
+      }"
+      >{{ link.displayName }}</router-link
     >
   </div>
 </template>

@@ -1,13 +1,6 @@
 ﻿<template>
   <div class="header__cart">
-    <a
-      @click="
-        $router.push({
-          name: 'Cart',
-        })
-      "
-      >{{ amount }} ₽</a
-    >
+    <router-link :to="{ name: 'Cart' }">{{ amount }} ₽</router-link>
   </div>
 </template>
 
