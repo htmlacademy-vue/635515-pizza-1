@@ -1,11 +1,9 @@
 ﻿<template>
   <div class="shadow">
     <div class="sign-form">
-      <router-link class="close close--white" :to="{ name: 'Home' }"
-        ><span class="visually-hidden"
-          >Закрыть форму авторизации</span
-        ></router-link
-      >
+      <a @click="$router.go(-1)" class="close close--white">
+        <span class="visually-hidden">Закрыть форму авторизации</span>
+      </a>
       <div class="sign-form__title">
         <h1 class="title title--small">Авторизуйтесь на сайте</h1>
       </div>
