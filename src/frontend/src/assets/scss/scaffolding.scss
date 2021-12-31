@@ -15,6 +15,12 @@ body {
   text-rendering: optimizeLegibility;
 }
 
+#app {
+  display: inherit;
+  flex-direction: inherit;
+  height: 100vh;
+}
+
 a {
   text-decoration: none;
 }

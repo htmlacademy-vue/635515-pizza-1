@@ -1,53 +1,52 @@
 ﻿<template>
-  <AppLayout>
-    <section>
-      <main class="content">
-        <form action="#" method="post">
-          <div class="content__wrapper">
-            <h1 class="title title--big">Конструктор пиццы</h1>
+  <section>
+    <main class="content">
+      <router-view />
+      <form action="#" method="post">
+        <div class="content__wrapper">
+          <h1 class="title title--big">Конструктор пиццы</h1>
 
-            <BuilderDoughSelector
-              :doughOptions="doughOptions"
-              :selectedItemValue="selectedDough"
-              @onSelect="handleSelectDough"
-            />
-            <BuilderSizeSelector
-              :sizes="sizes"
-              :selectedItemValue="selectedSize"
-              @onSelect="handleSelectSize"
-            />
-            <BuilderIngredientsSelector
-              :sauces="sauces"
-              :ingredients="ingredients"
-              :selectedItemValue="selectedSauce"
-              @onSelect="handleSelectSauce"
-              @counterChanged="handleIngredientsCounterChanged"
+          <BuilderDoughSelector
+            :doughOptions="doughOptions"
+            :selectedItemValue="selectedDough"
+            @onSelect="handleSelectDough"
+          />
+          <BuilderSizeSelector
+            :sizes="sizes"
+            :selectedItemValue="selectedSize"
+            @onSelect="handleSelectSize"
+          />
+          <BuilderIngredientsSelector
+            :sauces="sauces"
+            :ingredients="ingredients"
+            :selectedItemValue="selectedSauce"
+            @onSelect="handleSelectSauce"
+            @counterChanged="handleIngredientsCounterChanged"
+          />
+
+          <div class="content__pizza">
+            <BuilderPizzaFields
+              :fields="ingredientsSet.metadata"
+              @onChange="changeMetadataHandler"
             />
 
-            <div class="content__pizza">
-              <BuilderPizzaFields
-                :fields="ingredientsSet.metadata"
-                @onChange="changeMetadataHandler"
-              />
-
-              <BuilderPizzaView
-                :positions="ingredientsSet.positions"
-                @onDropIngredient="handleDropIngredient"
-              />
-              <BuilderPriceCounter
-                :positions="ingredientsSet.positions"
-                :metadata="ingredientsSet.metadata"
-                @submit="submitHandler"
-              />
-              <!-- <button type="button" class="button" @click="reset">
+            <BuilderPizzaView
+              :positions="ingredientsSet.positions"
+              @onDropIngredient="handleDropIngredient"
+            />
+            <BuilderPriceCounter
+              :positions="ingredientsSet.positions"
+              :metadata="ingredientsSet.metadata"
+              @submit="submitHandler"
+            />
+            <!-- <button type="button" class="button" @click="reset">
                 Сбросить
               </button> -->
-            </div>
           </div>
-        </form>
-      </main>
-    </section>
-  </AppLayout>
+        </div>
+      </form>
+    </main>
+  </section>
 </template>
 
 <script>
@@ -57,8 +56,6 @@ import user from "@/static/user.json";
 import { extendDough, extendIngredient } from "@/common/helpers";
 import SauceNames from "@/common/enums/sauceNames";
 import SizeNames from "@/common/enums/sizeNames";
-
-import AppLayout from "@/layouts/AppLayout";
 
 import BuilderDoughSelector from "@/modules/builder/BuilderDoughSelector";
 import BuilderSizeSelector from "@/modules/builder/BuilderSizeSelector";
@@ -77,7 +74,6 @@ import { hiddenError } from "@/common/helpers";
 export default {
   name: "IndexHome",
   components: {
-    AppLayout,
     BuilderIngredientsSelector,
     BuilderDoughSelector,
     BuilderSizeSelector,

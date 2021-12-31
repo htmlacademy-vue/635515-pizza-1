@@ -1,6 +1,6 @@
 ﻿<template>
   <div class="header__cart">
-    <a href="#">{{ amount }} ₽</a>
+    <router-link :to="{ name: 'Cart' }">{{ amount }} ₽</router-link>
   </div>
 </template>
 

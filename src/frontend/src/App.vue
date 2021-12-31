@@ -1,14 +1,15 @@
 <template>
-  <IndexHome />
+  <AppLayout>
+    <router-view />
+  </AppLayout>
 </template>
 
 <script>
-import IndexHome from "@/views/Index";
-
+import AppLayout from "@/layouts/AppLayout";
 export default {
   name: "App",
   components: {
-    IndexHome,
+    AppLayout,
   },
 };
 </script>
