@@ -5,3 +5,8 @@ export const ADD_PIZZA = "ADD_PIZZA";
 export const TO_ORDER = "TO_ORDER";
 
 export const ADD_TO_CART = "ADD_TO_CART";
+export const RESET_CART = "RESET_CART";
+
+export const CHANGE_PIZZA_COUNT = "CHANGE_PIZZA_COUNT";
+export const CHANGE_MISC_COUNT = "CHANGE_MISC_COUNT";
+export const CHANGE_CONTACTS = "CHANGE_CONTACTS";

@@ -146,6 +146,7 @@ export default {
       this.addToCart({
         positions: [...this.ingredientsSet.positions],
         metadata: [...this.ingredientsSet.metadata],
+        count: 1,
       });
       this.reset();
     },

@@ -4,7 +4,7 @@
       <router-link
         class="logo"
         :to="{
-          name: 'Home',
+          name: HOME,
         }"
       >
         <img
@@ -20,7 +20,7 @@
       <router-link
         class="header__login"
         :to="{
-          name: 'Login',
+          name: LOGIN,
         }"
         ><span>Войти</span></router-link
       >
@@ -30,10 +30,16 @@
 
 <script>
 import HeaderCart from "../modules/cart/HeaderCart.vue";
-
+import { HOME, LOGIN } from "@/router/route-names";
 export default {
   name: "AppLayoutHeader",
   components: { HeaderCart },
+  data() {
+    return {
+      HOME,
+      LOGIN,
+    };
+  },
 };
 </script>
 

@@ -6,244 +6,27 @@
           <h1 class="title title--big">Корзина</h1>
         </div>
 
-        <!-- <div class="sheet cart__empty">
+        <div v-if="pizza.length === 0" class="sheet cart__empty">
           <p>В корзине нет ни одного товара</p>
-        </div> -->
+        </div>
 
-        <ul class="cart-list sheet">
-          <li class="cart-list__item">
-            <div class="product cart-list__product">
-              <img
-                src="~@/assets/img/product.svg"
-                class="product__img"
-                width="56"
-                height="56"
-                alt="Капричоза"
-              />
-              <div class="product__text">
-                <h2>Капричоза</h2>
-                <ul>
-                  <li>30 см, на тонком тесте</li>
-                  <li>Соус: томатный</li>
-                  <li>Начинка: грибы, лук, ветчина, пармезан, ананас</li>
-                </ul>
-              </div>
-            </div>
-
-            <div class="counter cart-list__counter">
-              <button
-                type="button"
-                class="counter__button counter__button--minus"
-              >
-                <span class="visually-hidden">Меньше</span>
-              </button>
-              <input
-                type="text"
-                name="counter"
-                class="counter__input"
-                value="1"
-              />
-              <button
-                type="button"
-                class="
-                  counter__button counter__button--plus counter__button--orange
-                "
-              >
-                <span class="visually-hidden">Больше</span>
-              </button>
-            </div>
-
-            <div class="cart-list__price">
-              <b>782 ₽</b>
-            </div>
-
-            <div class="cart-list__button">
-              <button type="button" class="cart-list__edit">Изменить</button>
-            </div>
-          </li>
-          <li class="cart-list__item">
-            <div class="product cart-list__product">
-              <img
-                src="~@/assets/img/product.svg"
-                class="product__img"
-                width="56"
-                height="56"
-                alt="Любимая пицца"
-              />
-              <div class="product__text">
-                <h2>Любимая пицца</h2>
-                <ul>
-                  <li>30 см, на тонком тесте</li>
-                  <li>Соус: томатный</li>
-                  <li>
-                    Начинка: грибы, лук, ветчина, пармезан, ананас, бекон, блю
-                    чиз
-                  </li>
-                </ul>
-              </div>
-            </div>
-
-            <div class="counter cart-list__counter">
-              <button
-                type="button"
-                class="counter__button counter__button--minus"
-              >
-                <span class="visually-hidden">Меньше</span>
-              </button>
-              <input
-                type="text"
-                name="counter"
-                class="counter__input"
-                value="2"
-              />
-              <button
-                type="button"
-                class="
-                  counter__button counter__button--plus counter__button--orange
-                "
-              >
-                <span class="visually-hidden">Больше</span>
-              </button>
-            </div>
-
-            <div class="cart-list__price">
-              <b>782 ₽</b>
-            </div>
-
-            <div class="cart-list__button">
-              <button type="button" class="cart-list__edit">Изменить</button>
-            </div>
-          </li>
+        <ul v-else class="cart-list sheet">
+          <CartProduct
+            v-for="product in pizza"
+            :key="product.id"
+            :product="product"
+            @changeCount="changePizzaCount"
+          />
         </ul>
 
         <div class="cart__additional">
           <ul class="additional-list">
-            <li class="additional-list__item sheet">
-              <p class="additional-list__description">
-                <img
-                  src="~@/assets/img/cola.svg"
-                  width="39"
-                  height="60"
-                  alt="Coca-Cola 0,5 литра"
-                />
-                <span>Coca-Cola 0,5 литра</span>
-              </p>
-
-              <div class="additional-list__wrapper">
-                <div class="counter additional-list__counter">
-                  <button
-                    type="button"
-                    class="counter__button counter__button--minus"
-                  >
-                    <span class="visually-hidden">Меньше</span>
-                  </button>
-                  <input
-                    type="text"
-                    name="counter"
-                    class="counter__input"
-                    value="2"
-                  />
-                  <button
-                    type="button"
-                    class="
-                      counter__button
-                      counter__button--plus
-                      counter__button--orange
-                    "
-                  >
-                    <span class="visually-hidden">Больше</span>
-                  </button>
-                </div>
-
-                <div class="additional-list__price">
-                  <b>× 56 ₽</b>
-                </div>
-              </div>
-            </li>
-            <li class="additional-list__item sheet">
-              <p class="additional-list__description">
-                <img
-                  src="~@/assets/img/sauce.svg"
-                  width="39"
-                  height="60"
-                  alt="Острый соус"
-                />
-                <span>Острый соус</span>
-              </p>
-
-              <div class="additional-list__wrapper">
-                <div class="counter additional-list__counter">
-                  <button
-                    type="button"
-                    class="counter__button counter__button--minus"
-                  >
-                    <span class="visually-hidden">Меньше</span>
-                  </button>
-                  <input
-                    type="text"
-                    name="counter"
-                    class="counter__input"
-                    value="2"
-                  />
-                  <button
-                    type="button"
-                    class="
-                      counter__button
-                      counter__button--plus
-                      counter__button--orange
-                    "
-                  >
-                    <span class="visually-hidden">Больше</span>
-                  </button>
-                </div>
-
-                <div class="additional-list__price">
-                  <b>× 30 ₽</b>
-                </div>
-              </div>
-            </li>
-            <li class="additional-list__item sheet">
-              <p class="additional-list__description">
-                <img
-                  src="~@/assets/img/potato.svg"
-                  width="39"
-                  height="60"
-                  alt="Картошка из печи"
-                />
-                <span>Картошка из печи</span>
-              </p>
-
-              <div class="additional-list__wrapper">
-                <div class="counter additional-list__counter">
-                  <button
-                    type="button"
-                    class="counter__button counter__button--minus"
-                  >
-                    <span class="visually-hidden">Меньше</span>
-                  </button>
-                  <input
-                    type="text"
-                    name="counter"
-                    class="counter__input"
-                    value="2"
-                  />
-                  <button
-                    type="button"
-                    class="
-                      counter__button
-                      counter__button--plus
-                      counter__button--orange
-                    "
-                  >
-                    <span class="visually-hidden">Больше</span>
-                  </button>
-                </div>
-
-                <div class="additional-list__price">
-                  <b>× 56 ₽</b>
-                </div>
-              </div>
-            </li>
+            <CartAdditional
+              v-for="additional in misc"
+              :key="additional.id"
+              :item="additional"
+              @changeCount="changeMiscCount"
+            />
           </ul>
         </div>
 
@@ -261,7 +44,13 @@
 
             <label class="input input--big-label">
               <span>Контактный телефон:</span>
-              <input type="text" name="tel" placeholder="+7 999-999-99-99" />
+              <input
+                type="text"
+                name="tel"
+                placeholder="+7 999-999-99-99"
+                @change="onChangeInputs"
+                @keyup="onChangeInputs"
+              />
             </label>
 
             <div class="cart-form__address">
@@ -270,21 +59,36 @@
               <div class="cart-form__input">
                 <label class="input">
                   <span>Улица*</span>
-                  <input type="text" name="street" />
+                  <input
+                    type="text"
+                    name="street"
+                    @change="onChangeInputs"
+                    @keyup="onChangeInputs"
+                  />
                 </label>
               </div>
 
               <div class="cart-form__input cart-form__input--small">
                 <label class="input">
                   <span>Дом*</span>
-                  <input type="text" name="house" />
+                  <input
+                    type="text"
+                    name="house"
+                    @change="onChangeInputs"
+                    @keyup="onChangeInputs"
+                  />
                 </label>
               </div>
 
               <div class="cart-form__input cart-form__input--small">
                 <label class="input">
                   <span>Квартира</span>
-                  <input type="text" name="apartment" />
+                  <input
+                    type="text"
+                    name="apartment"
+                    @change="onChangeInputs"
+                    @keyup="onChangeInputs"
+                  />
                 </label>
               </div>
             </div>
@@ -294,7 +98,9 @@
     </main>
     <section class="footer">
       <div class="footer__more">
-        <router-link class="button button--border button--arrow"
+        <router-link
+          :to="{ name: HOME }"
+          class="button button--border button--arrow"
           >Хочу еще одну</router-link
         >
       </div>
@@ -302,7 +108,7 @@
         Перейти к конструктору<br />чтоб собрать ещё одну пиццу
       </p>
       <div class="footer__price">
-        <b>Итого: 2 228 ₽</b>
+        <b>Итого: {{ amount }} ₽</b>
       </div>
 
       <div class="footer__submit">
@@ -313,8 +119,44 @@
 </template>
 
 <script>
+import { mapState, mapMutations, mapGetters } from "vuex";
+import {
+  RESET_CART,
+  CHANGE_PIZZA_COUNT,
+  CHANGE_MISC_COUNT,
+  CHANGE_CONTACTS,
+} from "@/store/mutation-types";
+import { HOME } from "@/router/route-names";
+import CartProduct from "@/modules/cart/CartProduct.vue";
+import CartAdditional from "@/modules/cart/CartAdditional.vue";
 export default {
   name: "Cart",
+  data() {
+    return { HOME };
+  },
+  components: { CartProduct, CartAdditional },
+  computed: {
+    ...mapState("Cart", ["pizza", "misc", "contacts"]),
+    ...mapGetters("Cart", ["amount"]),
+  },
+  methods: {
+    ...mapMutations("Cart", {
+      reset: RESET_CART,
+      changePizzaCount: CHANGE_PIZZA_COUNT,
+      changeMiscCount: CHANGE_MISC_COUNT,
+      changeContacts: CHANGE_CONTACTS,
+    }),
+    submitHandler() {
+      this.sendOrder();
+      this.reset();
+    },
+    onChangeInputs(ev) {
+      const { name, value } = ev.target;
+      const newContacts = { ...this.contacts };
+      newContacts[name] = value;
+      this.changeContacts(newContacts);
+    },
+  },
 };
 </script>
 
