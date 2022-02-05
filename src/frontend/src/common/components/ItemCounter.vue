@@ -11,37 +11,23 @@
       {{ label }}
     </span>
 
-    <div
-      class="counter counter--orange"
-      :class="`${nameOfTheSelectable}__counter`"
-    >
-      <button
-        type="button"
-        class="counter__button counter__button--minus"
-        @click="handleDecrease"
-        :disabled="isDecreaseUnavailable"
-      >
-        <span class="visually-hidden">Меньше</span>
-      </button>
-      <input type="text" name="counter" class="counter__input" :value="value" />
-      <button
-        type="button"
-        class="counter__button counter__button--plus"
-        @click="handleIncrease"
-        :disabled="isIncreaseUnavailable"
-      >
-        <span class="visually-hidden">Больше</span>
-      </button>
-    </div>
+    <Counter
+      :counterName="nameOfTheSelectable"
+      :max="max"
+      :value="value"
+      @change="changeValue"
+    />
   </li>
 </template>
 
 <script>
 import { DATA_TRANSFER_PAYLOAD } from "@/common/constants";
 import DropEffects from "./../enums/dropEffects";
+import Counter from "@/common/components/Counter.vue";
 
 export default {
   name: "ItemCounter",
+  components: { Counter },
   props: {
     nameOfTheSelectable: {
       type: String,
@@ -68,28 +54,15 @@ export default {
     },
   },
   computed: {
-    isIncreaseUnavailable() {
-      return this.max ? this.value >= this.max : false;
-    },
-    isDecreaseUnavailable() {
-      return this.value === 0;
-    },
     isDraggable() {
       return this.transferData !== undefined && !this.isIncreaseUnavailable;
     },
   },
   methods: {
-    handleIncrease() {
+    changeValue({ newCount, oldCount }) {
       this.$emit("change", {
-        newCount: this.value + 1,
-        oldCount: this.value,
-        internalName: this.internalName,
-      });
-    },
-    handleDecrease() {
-      this.$emit("change", {
-        newCount: this.value - 1,
-        oldCount: this.value,
+        newCount,
+        oldCount,
         internalName: this.internalName,
       });
     },
