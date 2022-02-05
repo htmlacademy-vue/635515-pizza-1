@@ -28,6 +28,13 @@ export const hiddenError = (msg) => {
   console.error(msg);
 };
 
+export const hiddenWarning = (msg) => {
+  var console = window.console || {
+    warn: function () {},
+  };
+  console.warn(msg);
+};
+
 export const extendToType = (item, type) => {
   return { ...item, type };
 };
