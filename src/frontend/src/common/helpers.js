@@ -47,3 +47,6 @@ export const calculateAmount = (positions) => {
       : 1;
   return sum * multiplier;
 };
+
+export const capitalize = (string) =>
+  `${string.charAt(0).toUpperCase()}${string.slice(1)}`;
