@@ -59,9 +59,6 @@ import BuilderPizzaView from "@/modules/builder/BuilderPizzaView";
 import BuilderPriceCounter from "@/modules/builder/BuilderPriceCounter";
 import BuilderPizzaFields from "@/modules/builder/BuilderPizzaFields";
 
-import CartEventBus from "@/modules/cart/EventBus";
-import CartEventsEnum from "@/modules/cart/enums/events";
-
 import { hiddenError } from "@/common/helpers";
 
 import { mapState, mapGetters, mapMutations } from "vuex";
@@ -69,6 +66,7 @@ import {
   ADD_POSITION,
   REMOVE_POSITION,
   RESET_BUILDER,
+  ADD_TO_CART,
 } from "@/store/mutation-types";
 
 export default {
@@ -126,6 +124,10 @@ export default {
       reset: RESET_BUILDER,
     }),
 
+    ...mapMutations("Cart", {
+      addToCart: ADD_TO_CART,
+    }),
+
     changeMetadataHandler(changedValue) {
       const { internalName, newValue } = changedValue;
       const targetFields = this.ingredientsSet.metadata.filter(
@@ -141,7 +143,7 @@ export default {
       targetField.value = newValue;
     },
     submitHandler() {
-      CartEventBus.$emit(CartEventsEnum.AddToCart, {
+      this.addToCart({
         positions: [...this.ingredientsSet.positions],
         metadata: [...this.ingredientsSet.metadata],
       });

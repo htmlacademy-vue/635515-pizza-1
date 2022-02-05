@@ -5,16 +5,13 @@
 </template>
 
 <script>
-import EventBus from "./EventBus";
-import EventsEnum from "./enums/events";
 import { calculateAmount } from "@/common/helpers";
+import { mapState } from "vuex";
 
 export default {
   name: "HeaderCart",
-  data() {
-    return { pizza: [] };
-  },
   computed: {
+    ...mapState("Cart", ["pizza"]),
     amount() {
       let ret = 0;
       this.pizza.forEach((pizza) => {
@@ -23,15 +20,6 @@ export default {
 
       return ret;
     },
-  },
-  methods: {
-    addPizza(newPizza) {
-      console.log(newPizza);
-      this.pizza.push(newPizza);
-    },
-  },
-  mounted() {
-    EventBus.$on(EventsEnum.AddToCart, this.addPizza);
   },
 };
 </script>
