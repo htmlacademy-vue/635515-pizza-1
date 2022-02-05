@@ -50,12 +50,7 @@
 </template>
 
 <script>
-import misc from "@/static/misc.json";
-import pizza from "@/static/pizza.json";
 import user from "@/static/user.json";
-import { extendDough, extendIngredient } from "@/common/helpers";
-import SauceNames from "@/common/enums/sauceNames";
-import SizeNames from "@/common/enums/sizeNames";
 
 import BuilderDoughSelector from "@/modules/builder/BuilderDoughSelector";
 import BuilderSizeSelector from "@/modules/builder/BuilderSizeSelector";
@@ -67,9 +62,14 @@ import BuilderPizzaFields from "@/modules/builder/BuilderPizzaFields";
 import CartEventBus from "@/modules/cart/EventBus";
 import CartEventsEnum from "@/modules/cart/enums/events";
 
-import PositionTypes from "@/common/enums/positionTypes";
-
 import { hiddenError } from "@/common/helpers";
+
+import { mapState, mapGetters, mapMutations } from "vuex";
+import {
+  ADD_POSITION,
+  REMOVE_POSITION,
+  RESET_BUILDER,
+} from "@/store/mutation-types";
 
 export default {
   name: "IndexHome",
@@ -83,72 +83,24 @@ export default {
   },
   data() {
     return {
-      misc,
-      pizza,
       user,
-      sauces: pizza.sauces.map((sauce) => ({
-        ...sauce,
-        internalName: SauceNames[sauce.name],
-        type: PositionTypes.Sauce,
-      })),
-      sizes: pizza.sizes.map((size) => ({
-        ...size,
-        internalName: SizeNames[size.multiplier],
-        type: PositionTypes.Size,
-      })),
-      ingredients: pizza.ingredients.map((ingredient) =>
-        extendIngredient(ingredient)
-      ),
-      doughOptions: pizza.dough.map((doughItem) => extendDough(doughItem)),
-      ingredientsSet: {
-        positions: [],
-        metadata: [
-          {
-            internalName: "pizzaName",
-            displayName: "Название пиццы",
-            value: "",
-            required: true,
-          },
-        ],
-      },
     };
   },
   computed: {
-    addedIngredients() {
-      return this.ingredients
-        .filter((ingredient) => ingredient.count > 0)
-        .slice();
-    },
-    selectedDough() {
-      const dough = this.ingredientsSet.positions.filter(
-        (pos) => pos.type === PositionTypes.Dough
-      );
-      if (dough.length === 0) {
-        return "";
-      } else {
-        return dough[0].internalName;
-      }
-    },
-    selectedSize() {
-      const sizes = this.ingredientsSet.positions.filter(
-        (pos) => pos.type === PositionTypes.Size
-      );
-      if (sizes.length === 0) {
-        return "";
-      } else {
-        return sizes[0].internalName;
-      }
-    },
-    selectedSauce() {
-      const sauces = this.ingredientsSet.positions.filter(
-        (pos) => pos.type === PositionTypes.Sauce
-      );
-      if (sauces.length === 0) {
-        return "";
-      } else {
-        return sauces[0].internalName;
-      }
-    },
+    ...mapState("Builder", [
+      "ingredientsSet",
+      "ingredients",
+      "doughOptions",
+      "misc",
+      "sauces",
+      "sizes",
+    ]),
+    ...mapGetters("Builder", [
+      "selectedDough",
+      "selectedSize",
+      "selectedSauce",
+      "addedIngredients",
+    ]),
   },
   watch: {
     addedIngredients(newArray, oldArray) {
@@ -168,41 +120,12 @@ export default {
     },
   },
   methods: {
-    addPosition(position) {
-      if (!("price" in position || "multiplier" in position)) {
-        hiddenError(
-          `Event AddPosition passed an object with the wrong structure. The object must contain a price or multiplier field.`
-        );
-        return;
-      }
-      this.ingredientsSet.positions.push(position);
-    },
-    removePosition(position) {
-      const { positions } = this.ingredientsSet;
-      const findedPositions = positions.filter(
-        (item) => item.internalName === position.internalName
-      );
-      if (findedPositions.length === 0) {
-        hiddenError(
-          `Event RemovePosition passed an wrong object. The collection has no such object. Internal name ${position.internalName}`
-        );
-        return;
-      }
-      const index = positions.indexOf(findedPositions[0]);
-      if (index !== -1) {
-        positions.splice(index, 1);
-      }
-    },
-    reset() {
-      this.ingredients.forEach((ingredient) => {
-        ingredient.count = 0;
-      });
-      this.ingredientsSet.metadata.forEach((field) => {
-        field.value = "";
-      });
-      const { positions } = this.ingredientsSet;
-      positions.splice(0, positions.length);
-    },
+    ...mapMutations("Builder", {
+      addPosition: ADD_POSITION,
+      removePosition: REMOVE_POSITION,
+      reset: RESET_BUILDER,
+    }),
+
     changeMetadataHandler(changedValue) {
       const { internalName, newValue } = changedValue;
       const targetFields = this.ingredientsSet.metadata.filter(
