@@ -62,8 +62,8 @@ export const capitalize = (string) => {
 export const filterSelected = (positions, type) => {
   const filtered = positions.filter((pos) => pos.type === type);
   if (filtered.length === 0) {
-    return "";
+    return null;
   } else {
-    return filtered[0].internalName;
+    return filtered[0];
   }
 };

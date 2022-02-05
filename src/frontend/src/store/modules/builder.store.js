@@ -48,19 +48,33 @@ const setupState = () => ({
   },
 });
 
+const getSelectedInternalName = (positions, type) => {
+  const ret = filterSelected(positions, type);
+  return ret !== null ? ret.internalName : "";
+};
+
 export default {
   namespaced: true,
   state: setupState(),
 
   getters: {
     selectedDough({ ingredientsSet }) {
-      return filterSelected(ingredientsSet.positions, PositionTypes.Dough);
+      return getSelectedInternalName(
+        ingredientsSet.positions,
+        PositionTypes.Dough
+      );
     },
     selectedSize({ ingredientsSet }) {
-      return filterSelected(ingredientsSet.positions, PositionTypes.Size);
+      return getSelectedInternalName(
+        ingredientsSet.positions,
+        PositionTypes.Size
+      );
     },
     selectedSauce({ ingredientsSet }) {
-      return filterSelected(ingredientsSet.positions, PositionTypes.Sauce);
+      return getSelectedInternalName(
+        ingredientsSet.positions,
+        PositionTypes.Sauce
+      );
     },
     addedIngredients({ ingredients }) {
       return ingredients.filter((ingredient) => ingredient.count > 0).slice();
