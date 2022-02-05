@@ -7,7 +7,7 @@ import SauceNames from "@/common/enums/sauceNames";
 import SizeNames from "@/common/enums/sizeNames";
 
 import { extendDough } from "@/common/helpers";
-import { hiddenError, hiddenWarning } from "@/common/helpers";
+import { hiddenError, hiddenWarning, filterSelected } from "@/common/helpers";
 import {
   ADD_POSITION,
   REMOVE_POSITION,
@@ -54,34 +54,13 @@ export default {
 
   getters: {
     selectedDough({ ingredientsSet }) {
-      const dough = ingredientsSet.positions.filter(
-        (pos) => pos.type === PositionTypes.Dough
-      );
-      if (dough.length === 0) {
-        return "";
-      } else {
-        return dough[0].internalName;
-      }
+      return filterSelected(ingredientsSet.positions, PositionTypes.Dough);
     },
     selectedSize({ ingredientsSet }) {
-      const sizes = ingredientsSet.positions.filter(
-        (pos) => pos.type === PositionTypes.Size
-      );
-      if (sizes.length === 0) {
-        return "";
-      } else {
-        return sizes[0].internalName;
-      }
+      return filterSelected(ingredientsSet.positions, PositionTypes.Size);
     },
     selectedSauce({ ingredientsSet }) {
-      const sauces = ingredientsSet.positions.filter(
-        (pos) => pos.type === PositionTypes.Sauce
-      );
-      if (sauces.length === 0) {
-        return "";
-      } else {
-        return sauces[0].internalName;
-      }
+      return filterSelected(ingredientsSet.positions, PositionTypes.Sauce);
     },
     addedIngredients({ ingredients }) {
       return ingredients.filter((ingredient) => ingredient.count > 0).slice();

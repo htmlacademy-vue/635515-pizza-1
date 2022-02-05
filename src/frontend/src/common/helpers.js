@@ -55,5 +55,15 @@ export const calculateAmount = (positions) => {
   return sum * multiplier;
 };
 
-export const capitalize = (string) =>
+export const capitalize = (string) => {
   `${string.charAt(0).toUpperCase()}${string.slice(1)}`;
+};
+
+export const filterSelected = (positions, type) => {
+  const filtered = positions.filter((pos) => pos.type === type);
+  if (filtered.length === 0) {
+    return "";
+  } else {
+    return filtered[0].internalName;
+  }
+};
