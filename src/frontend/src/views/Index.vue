@@ -59,6 +59,8 @@ import BuilderPizzaView from "@/modules/builder/BuilderPizzaView";
 import BuilderPriceCounter from "@/modules/builder/BuilderPriceCounter";
 import BuilderPizzaFields from "@/modules/builder/BuilderPizzaFields";
 
+import { CART } from "@/router/route-names";
+
 import { hiddenError } from "@/common/helpers";
 
 import { mapState, mapGetters, mapMutations } from "vuex";
@@ -143,12 +145,16 @@ export default {
       targetField.value = newValue;
     },
     submitHandler() {
+      const comebackToCart = this.ingredientsSet.id !== null;
       this.addToCart({
-        positions: [...this.ingredientsSet.positions],
-        metadata: [...this.ingredientsSet.metadata],
-        count: 1,
+        ...this.ingredientsSet,
+        // positions: [...this.ingredientsSet.positions],
+        // metadata: [...this.ingredientsSet.metadata],
       });
       this.reset();
+      if (comebackToCart) {
+        this.$router.push({ name: CART });
+      }
     },
     handleSelectDough(value) {
       if (this.selectedDough !== "") {

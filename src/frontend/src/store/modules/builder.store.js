@@ -12,6 +12,7 @@ import {
   ADD_POSITION,
   REMOVE_POSITION,
   RESET_BUILDER,
+  SET_PIZZA,
 } from "@/store/mutation-types";
 
 // const entity = 'columns';
@@ -36,6 +37,7 @@ const setupState = () => ({
     extendIngredient(ingredient)
   ),
   ingredientsSet: {
+    id: null,
     positions: [],
     metadata: [
       {
@@ -45,6 +47,7 @@ const setupState = () => ({
         required: true,
       },
     ],
+    count: 1,
   },
 });
 
@@ -115,6 +118,9 @@ export default {
       }
 
       state.ingredientsSet.positions = findedPositions;
+    },
+    [SET_PIZZA](state, pizza) {
+      state.ingredientsSet = { ...pizza };
     },
     [RESET_BUILDER](state) {
       Object.assign(state, setupState());

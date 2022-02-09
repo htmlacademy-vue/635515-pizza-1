@@ -19,10 +19,11 @@
 
         <ul v-else class="cart-list sheet">
           <CartProduct
-            v-for="product in pizza"
+            v-for="product in orderedPizza"
             :key="product.id"
             :product="product"
             @changeCount="changePizzaCount"
+            @editProduct="editProductHandler"
           />
         </ul>
 
@@ -132,6 +133,7 @@ import {
   CHANGE_PIZZA_COUNT,
   CHANGE_MISC_COUNT,
   CHANGE_CONTACTS,
+  SET_PIZZA,
 } from "@/store/mutation-types";
 import { HOME } from "@/router/route-names";
 
@@ -147,7 +149,7 @@ export default {
   components: { CartProduct, CartAdditional, CartPopup },
   computed: {
     ...mapState("Cart", ["pizza", "misc", "contacts"]),
-    ...mapGetters("Cart", ["amount"]),
+    ...mapGetters("Cart", ["amount", "orderedPizza"]),
   },
   methods: {
     ...mapMutations("Cart", {
@@ -156,6 +158,9 @@ export default {
       changeMiscCount: CHANGE_MISC_COUNT,
       changeContacts: CHANGE_CONTACTS,
     }),
+    ...mapMutations("Builder", {
+      setBuilderPizza: SET_PIZZA,
+    }),
     ...mapActions("Cart", {
       sendOrder: "sendOrder",
     }),
@@ -163,6 +168,10 @@ export default {
       this.sendOrder().then(() => {
         this.orderSended = true;
       });
+    },
+    editProductHandler(product) {
+      this.setBuilderPizza(product);
+      this.$router.push({ name: HOME });
     },
     onChangeInputs(ev) {
       const { name, value } = ev.target;

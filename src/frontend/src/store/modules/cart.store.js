@@ -33,10 +33,22 @@ export default {
 
       return ret;
     },
+    orderedPizza({ pizza }) {
+      return pizza.sort((a, b) => (a.id < b.id ? -1 : 1));
+    },
   },
   mutations: {
     [ADD_TO_CART](state, newPizza) {
-      state.pizza = [...state.pizza, { ...newPizza, id: increment++ }];
+      if (newPizza.id === null) {
+        state.pizza = [...state.pizza, { ...newPizza, id: increment++ }];
+        return;
+      }
+
+      const withoutCurrent = state.pizza.filter(
+        (product) => product.id !== newPizza.id
+      );
+
+      state.pizza = [...withoutCurrent, { ...newPizza }];
     },
     [CHANGE_PIZZA_COUNT](state, { newCount, id }) {
       if (newCount === 0) {

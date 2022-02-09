@@ -30,7 +30,13 @@
     </div>
 
     <div class="cart-list__button">
-      <button type="button" class="cart-list__edit">Изменить</button>
+      <button
+        type="button"
+        class="cart-list__edit"
+        @click="$emit('editProduct', product)"
+      >
+        Изменить
+      </button>
     </div>
   </li>
 </template>
