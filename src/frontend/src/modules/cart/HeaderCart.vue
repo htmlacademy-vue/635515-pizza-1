@@ -5,7 +5,6 @@
 </template>
 
 <script>
-// import { calculateAmount } from "@/common/helpers";
 import { mapGetters } from "vuex";
 import { CART } from "@/router/route-names";
 
@@ -15,16 +14,7 @@ export default {
     return { CART };
   },
   computed: {
-    // ...mapState("Cart", ["pizza"]),
     ...mapGetters("Cart", ["amount"]),
-    // amount() {
-    //   let ret = 0;
-    //   this.pizza.forEach((pizza) => {
-    //     ret += calculateAmount(pizza.positions);
-    //   });
-
-    //   return ret;
-    // },
   },
 };
 </script>

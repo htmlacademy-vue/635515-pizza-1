@@ -1,7 +1,14 @@
 ﻿<template>
-  <form action="test.html" method="post" class="layout-form">
+  <form
+    action="test.html"
+    method="post"
+    class="layout-form"
+    @submit.prevent="submitHandler"
+  >
     <main class="content cart">
       <div class="container">
+        <CartPopup v-if="orderSended" />
+
         <div class="cart__title">
           <h1 class="title title--big">Корзина</h1>
         </div>
@@ -119,7 +126,7 @@
 </template>
 
 <script>
-import { mapState, mapMutations, mapGetters } from "vuex";
+import { mapState, mapMutations, mapGetters, mapActions } from "vuex";
 import {
   RESET_CART,
   CHANGE_PIZZA_COUNT,
@@ -127,14 +134,17 @@ import {
   CHANGE_CONTACTS,
 } from "@/store/mutation-types";
 import { HOME } from "@/router/route-names";
+
 import CartProduct from "@/modules/cart/CartProduct.vue";
 import CartAdditional from "@/modules/cart/CartAdditional.vue";
+import CartPopup from "@/modules/cart/CartPopup.vue";
+
 export default {
   name: "Cart",
   data() {
-    return { HOME };
+    return { HOME, orderSended: false };
   },
-  components: { CartProduct, CartAdditional },
+  components: { CartProduct, CartAdditional, CartPopup },
   computed: {
     ...mapState("Cart", ["pizza", "misc", "contacts"]),
     ...mapGetters("Cart", ["amount"]),
@@ -146,9 +156,13 @@ export default {
       changeMiscCount: CHANGE_MISC_COUNT,
       changeContacts: CHANGE_CONTACTS,
     }),
+    ...mapActions("Cart", {
+      sendOrder: "sendOrder",
+    }),
     submitHandler() {
-      this.sendOrder();
-      this.reset();
+      this.sendOrder().then(() => {
+        this.orderSended = true;
+      });
     },
     onChangeInputs(ev) {
       const { name, value } = ev.target;

@@ -71,4 +71,9 @@ export default {
       Object.assign(state, setupState());
     },
   },
+  actions: {
+    async sendOrder({ commit }) {
+      commit(RESET_CART);
+    },
+  },
 };
