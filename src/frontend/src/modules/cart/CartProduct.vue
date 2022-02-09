@@ -48,7 +48,6 @@ import Counter from "@/common/components/Counter.vue";
 
 import { calculateAmount } from "@/common/helpers";
 
-// TODO: Add props for pizza builder
 export default {
   name: "CartProduct",
   components: { Counter },

@@ -16,28 +16,20 @@
       </router-link>
     </div>
     <HeaderCart />
-    <div class="header__user">
-      <router-link
-        class="header__login"
-        :to="{
-          name: LOGIN,
-        }"
-        ><span>Войти</span></router-link
-      >
-    </div>
+    <HeaderUser />
   </header>
 </template>
 
 <script>
 import HeaderCart from "../modules/cart/HeaderCart.vue";
-import { HOME, LOGIN } from "@/router/route-names";
+import HeaderUser from "../modules/auth/HeaderUser.vue";
+import { HOME } from "@/router/route-names";
 export default {
   name: "AppLayoutHeader",
-  components: { HeaderCart },
+  components: { HeaderCart, HeaderUser },
   data() {
     return {
       HOME,
-      LOGIN,
     };
   },
 };
