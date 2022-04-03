@@ -121,6 +121,13 @@ export default {
     },
     [SET_PIZZA](state, pizza) {
       state.ingredientsSet = { ...pizza };
+      pizza.positions
+        .filter((pos) => pos.type == PositionTypes.Ingredient)
+        .forEach((pos) => {
+          state.ingredients
+            .filter((ing) => ing.internalName == pos.internalName)
+            .forEach((current) => (current.count = pos.count));
+        });
     },
     [RESET_BUILDER](state) {
       Object.assign(state, setupState());
