@@ -5,11 +5,12 @@ import {
   CHANGE_PIZZA_COUNT,
   CHANGE_MISC_COUNT,
   CHANGE_CONTACTS,
+  SET_ENTITY,
 } from "@/store/mutation-types";
 import { hiddenError, calculateAmount } from "@/common/helpers";
 
 const setupState = () => ({
-  misc: misc.map((item) => ({ ...item, count: 0 })),
+  misc: [],
   pizza: [],
   contacts: {
     street: "",
@@ -91,6 +92,18 @@ export default {
   actions: {
     async sendOrder({ commit }) {
       commit(RESET_CART);
+    },
+    async queryMisc({ commit }) {
+      const data = misc.map((item) => ({ ...item, count: 0 })); // TODO: Add api call
+      commit(
+        SET_ENTITY,
+        {
+          entity: "misc",
+          module: "Cart",
+          value: data,
+        },
+        { root: true }
+      );
     },
   },
 };

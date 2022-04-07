@@ -142,6 +142,7 @@ import {
   CHANGE_MISC_COUNT,
   CHANGE_CONTACTS,
   SET_PIZZA,
+  ADD_TO_ORDERS,
 } from "@/store/mutation-types";
 import { HOME } from "@/router/route-names";
 
@@ -157,6 +158,7 @@ export default {
   components: { CartProduct, CartAdditional, CartPopup },
   computed: {
     ...mapState("Cart", ["pizza", "misc", "contacts"]),
+    ...mapState("Auth", ["user"]),
     ...mapGetters("Cart", ["amount", "orderedPizza"]),
     ...mapGetters("Auth", ["isAuthorized"]),
     receivingOrderOptions() {
@@ -184,10 +186,19 @@ export default {
     ...mapMutations("Builder", {
       setBuilderPizza: SET_PIZZA,
     }),
+    ...mapMutations("Orders", {
+      addOrder: ADD_TO_ORDERS,
+    }),
     ...mapActions("Cart", {
       sendOrder: "sendOrder",
     }),
     submitHandler() {
+      this.addOrder({
+        userId: this.user.id,
+        pizza: this.pizza,
+        misc: this.misc,
+        contacts: this.contacts,
+      });
       this.sendOrder().then(() => {
         this.orderSended = true;
       });

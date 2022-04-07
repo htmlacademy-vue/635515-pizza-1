@@ -10,7 +10,9 @@
       </div>
       <p>Мы начали готовить Ваш заказ, скоро привезём его вам ;)</p>
       <div class="popup__button">
-        <router-link :to="{ name: ORDERS }" class="button"
+        <router-link
+          :to="isAuthorized ? { name: ORDERS } : { name: HOME }"
+          class="button"
           >Отлично, я жду!</router-link
         >
       </div>
@@ -19,11 +21,15 @@
 </template>
 
 <script>
-import { ORDERS } from "@/router/route-names";
+import { ORDERS, HOME } from "@/router/route-names";
+import { mapGetters } from "vuex";
 export default {
   name: "CartPopup",
   data() {
-    return { ORDERS };
+    return { ORDERS, HOME };
+  },
+  computed: {
+    ...mapGetters("Auth", ["isAuthorized"]),
   },
 };
 </script>

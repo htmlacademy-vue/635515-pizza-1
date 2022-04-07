@@ -11,3 +11,6 @@ export const RESET_CART = "RESET_CART";
 export const CHANGE_PIZZA_COUNT = "CHANGE_PIZZA_COUNT";
 export const CHANGE_MISC_COUNT = "CHANGE_MISC_COUNT";
 export const CHANGE_CONTACTS = "CHANGE_CONTACTS";
+
+export const ADD_TO_ORDERS = "ADD_TO_ORDERS";
+export const SET_ENTITY = "SET_ENTITY";
