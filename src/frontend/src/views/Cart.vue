@@ -43,10 +43,18 @@
             <label class="cart-form__select">
               <span class="cart-form__label">Получение заказа:</span>
 
-              <select name="test" class="select">
-                <option value="1">Заберу сам</option>
-                <option value="2">Новый адрес</option>
-                <option value="3">Дом</option>
+              <select
+                name="receiptType"
+                class="select"
+                @change="onChangeInputs"
+              >
+                <option
+                  v-for="opt in receivingOrderOptions"
+                  :key="opt.value"
+                  :value="opt.value"
+                >
+                  {{ opt.displayText }}
+                </option>
               </select>
             </label>
 
@@ -150,6 +158,21 @@ export default {
   computed: {
     ...mapState("Cart", ["pizza", "misc", "contacts"]),
     ...mapGetters("Cart", ["amount", "orderedPizza"]),
+    ...mapGetters("Auth", ["isAuthorized"]),
+    receivingOrderOptions() {
+      if (this.isAuthorized) {
+        return [
+          { value: "1", displayText: "Заберу сам" },
+          { value: "2", displayText: "Новый адрес" },
+          { value: "3", displayText: "Дом" },
+        ];
+      } else {
+        return [
+          { value: "1", displayText: "Заберу сам" },
+          { value: "2", displayText: "Новый адрес" },
+        ];
+      }
+    },
   },
   methods: {
     ...mapMutations("Cart", {

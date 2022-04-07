@@ -11,8 +11,13 @@ import { hiddenError, calculateAmount } from "@/common/helpers";
 const setupState = () => ({
   misc: misc.map((item) => ({ ...item, count: 0 })),
   pizza: [],
-  contacts: { street: "", tel: "", house: null, apartment: null },
-  ReceiptType: 1,
+  contacts: {
+    street: "",
+    tel: "",
+    house: null,
+    apartment: null,
+    receiptType: "1",
+  },
 });
 
 let increment = 0;
