@@ -1,5 +1,4 @@
 ﻿import pizza from "@/static/pizza.json";
-import misc from "@/static/misc.json";
 
 import { extendIngredient /*, capitalize */ } from "@/common/helpers";
 import PositionTypes from "@/common/enums/positionTypes";
@@ -20,7 +19,6 @@ import {
 // const namespace = { entity, module };
 
 const setupState = () => ({
-  misc,
   sauces: pizza.sauces.map((sauce) => ({
     ...sauce,
     internalName: SauceNames[sauce.name],
@@ -31,11 +29,9 @@ const setupState = () => ({
     internalName: SizeNames[size.multiplier],
     type: PositionTypes.Size,
   })),
-  doughOptions: pizza.dough.map((doughItem) => extendDough(doughItem)),
+  doughOptions: pizza.dough.map(extendDough),
+  ingredients: pizza.ingredients.map(extendIngredient),
 
-  ingredients: pizza.ingredients.map((ingredient) =>
-    extendIngredient(ingredient)
-  ),
   ingredientsSet: {
     id: null,
     positions: [],

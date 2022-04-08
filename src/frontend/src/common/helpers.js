@@ -60,10 +60,5 @@ export const capitalize = (string) => {
 };
 
 export const filterSelected = (positions, type) => {
-  const filtered = positions.filter((pos) => pos.type === type);
-  if (filtered.length === 0) {
-    return null;
-  } else {
-    return filtered[0];
-  }
+  return positions.find((pos) => pos.type === type) || null;
 };

@@ -9,7 +9,7 @@
       <Counter
         counterName="cart-list"
         :value="item.count"
-        :isOrange="true"
+        isOrange
         @change="changeCount"
       />
 
