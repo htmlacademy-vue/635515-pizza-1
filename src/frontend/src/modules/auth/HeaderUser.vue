@@ -12,7 +12,7 @@
       </picture>
       <span>{{ user.name }}</span>
     </a>
-    <a href="#" class="header__logout"><span>Выйти</span></a>
+    <a href="#" class="header__logout" @click="$logout"><span>Выйти</span></a>
   </div>
   <div v-else class="header__user">
     <router-link
@@ -28,9 +28,11 @@
 <script>
 import { mapState } from "vuex";
 import { LOGIN } from "@/router/route-names";
+import { logout } from "@/common/mixins";
 
 export default {
   name: "HeaderUser",
+  mixins: [logout],
   data() {
     return {
       LOGIN,

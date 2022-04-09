@@ -2,14 +2,18 @@
 import axios from "@/plugins/axios";
 
 class BaseApiService {
-  constructor() {}
+  constructor(notifier) {
+    if (!axios.$notifier) {
+      axios.$notifier = notifier;
+    }
+  }
 }
 
 export class ReadOnlyApiService extends BaseApiService {
   #resource;
 
-  constructor(resource) {
-    super();
+  constructor(resource, notifier) {
+    super(notifier);
     this.#resource = resource;
   }
 
@@ -27,8 +31,8 @@ export class ReadOnlyApiService extends BaseApiService {
 export class CrudApiService extends ReadOnlyApiService {
   #resource;
 
-  constructor(resource) {
-    super(resource);
+  constructor(resource, notifier) {
+    super(resource, notifier);
     this.#resource = resource;
   }
 
@@ -48,7 +52,6 @@ export class CrudApiService extends ReadOnlyApiService {
   }
 }
 
-// наследуемся от BaseApiService, так как класс не подразумевает CRUD операции
 export class AuthApiService extends BaseApiService {
   constructor(notifier) {
     super(notifier);
