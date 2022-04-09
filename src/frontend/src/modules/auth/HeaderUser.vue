@@ -1,17 +1,11 @@
 ﻿<template>
   <div v-if="user !== null" class="header__user">
-    <a href="user-data.html">
+    <router-link :to="{ name: PROFILE }">
       <picture>
-        <!-- TODO: correct image render -->
-        <img
-          src="~@/assets/img/users/user5.jpg"
-          alt="Василий Ложкин"
-          width="32"
-          height="32"
-        />
+        <img :src="user.avatar" :alt="user.name" width="32" height="32" />
       </picture>
       <span>{{ user.name }}</span>
-    </a>
+    </router-link>
     <a href="#" class="header__logout" @click="$logout"><span>Выйти</span></a>
   </div>
   <div v-else class="header__user">
@@ -27,7 +21,7 @@
 
 <script>
 import { mapState } from "vuex";
-import { LOGIN } from "@/router/route-names";
+import { LOGIN, PROFILE } from "@/router/route-names";
 import { logout } from "@/common/mixins";
 
 export default {
@@ -36,6 +30,7 @@ export default {
   data() {
     return {
       LOGIN,
+      PROFILE,
     };
   },
   computed: {
