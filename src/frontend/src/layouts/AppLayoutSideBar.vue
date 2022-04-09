@@ -3,7 +3,7 @@
     <router-link
       class="logo layout__logo"
       :to="{
-        name: 'Home',
+        name: HOME,
       }"
       ><img
         src="~@/assets/img/logo.svg"
@@ -26,13 +26,16 @@
 </template>
 
 <script>
+import { HOME, ORDERS, PROFILE } from "@/router/route-names";
+
 export default {
   name: "AppLayoutSideBar",
   data() {
     return {
+      HOME,
       navLinks: [
-        { displayName: "История заказов", routeName: "Orders" },
-        { displayName: "Мои данные", routeName: "Profile" },
+        { displayName: "История заказов", routeName: ORDERS },
+        { displayName: "Мои данные", routeName: PROFILE },
       ],
     };
   },

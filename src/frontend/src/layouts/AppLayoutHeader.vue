@@ -4,7 +4,7 @@
       <router-link
         class="logo"
         :to="{
-          name: 'Home',
+          name: HOME,
         }"
       >
         <img
@@ -16,24 +16,22 @@
       </router-link>
     </div>
     <HeaderCart />
-    <div class="header__user">
-      <router-link
-        class="header__login"
-        :to="{
-          name: 'Login',
-        }"
-        ><span>Войти</span></router-link
-      >
-    </div>
+    <HeaderUser />
   </header>
 </template>
 
 <script>
 import HeaderCart from "../modules/cart/HeaderCart.vue";
-
+import HeaderUser from "../modules/auth/HeaderUser.vue";
+import { HOME } from "@/router/route-names";
 export default {
   name: "AppLayoutHeader",
-  components: { HeaderCart },
+  components: { HeaderCart, HeaderUser },
+  data() {
+    return {
+      HOME,
+    };
+  },
 };
 </script>
 
