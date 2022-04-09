@@ -7,7 +7,7 @@
           <h1 class="title title--big">Конструктор пиццы</h1>
 
           <BuilderDoughSelector
-            :doughOptions="doughOptions"
+            :dough="dough"
             :selectedItemValue="selectedDough"
             @onSelect="handleSelectDough"
           />
@@ -90,7 +90,7 @@ export default {
     ...mapState("Builder", [
       "ingredientsSet",
       "ingredients",
-      "doughOptions",
+      "dough",
       "misc",
       "sauces",
       "sizes",
@@ -118,6 +118,9 @@ export default {
         });
       });
     },
+  },
+  beforeDestroy() {
+    this.reset();
   },
   methods: {
     ...mapMutations("Builder", {
@@ -158,13 +161,13 @@ export default {
     },
     handleSelectDough(value) {
       if (this.selectedDough !== "") {
-        const oldSelectedPosition = this.doughOptions.filter(
+        const oldSelectedPosition = this.dough.filter(
           (item) => item.internalName === this.selectedDough
         )[0];
         this.removePosition({ ...oldSelectedPosition });
       }
 
-      const selectedPosition = this.doughOptions.filter(
+      const selectedPosition = this.dough.filter(
         (item) => item.internalName === value
       )[0];
       this.addPosition({ ...selectedPosition });

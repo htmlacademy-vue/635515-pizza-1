@@ -1,36 +1,36 @@
-﻿import pizza from "@/static/pizza.json";
+﻿import PositionTypes from "@/common/enums/positionTypes";
 
-import { extendIngredient /*, capitalize */ } from "@/common/helpers";
-import PositionTypes from "@/common/enums/positionTypes";
-import SauceNames from "@/common/enums/sauceNames";
-import SizeNames from "@/common/enums/sizeNames";
-
-import { extendDough } from "@/common/helpers";
-import { hiddenError, hiddenWarning, filterSelected } from "@/common/helpers";
+import {
+  hiddenError,
+  hiddenWarning,
+  filterSelected,
+  extensions,
+} from "@/common/helpers";
 import {
   ADD_POSITION,
   REMOVE_POSITION,
   RESET_BUILDER,
   SET_PIZZA,
+  SET_ENTITY,
 } from "@/store/mutation-types";
+import resources from "@/common/enums/resources";
 
-// const entity = 'columns';
-// const module = capitalize(entity);
-// const namespace = { entity, module };
+const defaultContent = {
+  [resources.INGREDIENTS]: [],
+  [resources.DOUGH]: [],
+  [resources.SAUCES]: [],
+  [resources.SIZES]: [],
+};
+
+const copyResources = (resource) => {
+  return [...defaultContent[resource].map((item) => ({ ...item }))];
+};
 
 const setupState = () => ({
-  sauces: pizza.sauces.map((sauce) => ({
-    ...sauce,
-    internalName: SauceNames[sauce.name],
-    type: PositionTypes.Sauce,
-  })),
-  sizes: pizza.sizes.map((size) => ({
-    ...size,
-    internalName: SizeNames[size.multiplier],
-    type: PositionTypes.Size,
-  })),
-  doughOptions: pizza.dough.map(extendDough),
-  ingredients: pizza.ingredients.map(extendIngredient),
+  [resources.INGREDIENTS]: copyResources(resources.INGREDIENTS),
+  [resources.DOUGH]: copyResources(resources.DOUGH),
+  [resources.SAUCES]: copyResources(resources.SAUCES),
+  [resources.SIZES]: copyResources(resources.SIZES),
 
   ingredientsSet: {
     id: null,
@@ -77,6 +77,22 @@ export default {
     },
     addedIngredients({ ingredients }) {
       return ingredients.filter((ingredient) => ingredient.count > 0).slice();
+    },
+  },
+
+  actions: {
+    async queryRes({ commit }, resource) {
+      const data = await this.$api[resource].query();
+      defaultContent[resource] = data.map(extensions[resource]);
+      commit(
+        SET_ENTITY,
+        {
+          entity: resource,
+          module: "Builder",
+          value: copyResources(resource),
+        },
+        { root: true }
+      );
     },
   },
 

@@ -34,7 +34,7 @@ export default {
         .filter((position) => position.type === PositionTypes.Ingredient)
         .slice();
     },
-    doughOptions() {
+    dough() {
       return this.positions
         .filter((position) => position.type === PositionTypes.Dough)
         .slice();
@@ -68,7 +68,7 @@ export default {
       return (
         this.sauces.length === 0 ||
         this.sizes.length === 0 ||
-        this.doughOptions.length === 0 ||
+        this.dough.length === 0 ||
         !this.isRequiredFieldsHaveValues
       );
     },

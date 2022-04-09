@@ -6,6 +6,9 @@ import {
   ReadOnlyApiService,
 } from "@/services/api.service";
 
+import SauceNames from "@/common/enums/sauceNames";
+import SizeNames from "@/common/enums/sizeNames";
+
 export const extendDough = (dough) => {
   const { image } = dough;
   const regexResult = /dough-(\w*).svg/.exec(image);
@@ -25,6 +28,25 @@ export const extendIngredient = (ingredient) => {
     count: 0,
     type: PositionTypes.Ingredient,
   };
+};
+
+export const extendSize = (size) => ({
+  ...size,
+  internalName: SizeNames[size.multiplier],
+  type: PositionTypes.Size,
+});
+
+export const extendSauce = (sauce) => ({
+  ...sauce,
+  internalName: SauceNames[sauce.name],
+  type: PositionTypes.Sauce,
+});
+
+export const extensions = {
+  [resources.INGREDIENTS]: extendIngredient,
+  [resources.DOUGH]: extendDough,
+  [resources.SAUCES]: extendSauce,
+  [resources.SIZES]: extendSize,
 };
 
 export const hiddenError = (msg) => {

@@ -5,13 +5,13 @@
 
       <div class="sheet__content dough">
         <SelectorItem
-          v-for="dough in doughOptions"
-          :key="dough.id"
+          v-for="{ id, internalName, name, description } in dough"
+          :key="id"
           nameOfTheSelectable="dough"
-          :checked="dough.internalName === selectedItemValue"
-          :label="dough.name"
-          :value="dough.internalName"
-          :description="dough.description"
+          :checked="internalName === selectedItemValue"
+          :label="name"
+          :value="internalName"
+          :description="description"
           @selectItem="$emit('onSelect', $event)"
         />
       </div>
@@ -26,7 +26,7 @@ export default {
   name: "BuilderDoughSelector",
   components: { SelectorItem },
   props: {
-    doughOptions: {
+    dough: {
       type: Array,
       required: true,
     },
