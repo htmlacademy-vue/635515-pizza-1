@@ -1,4 +1,10 @@
 ﻿import PositionTypes from "@/common/enums/positionTypes";
+import resources from "@/common/enums/resources";
+import {
+  AuthApiService,
+  CrudApiService,
+  ReadOnlyApiService,
+} from "@/services/api.service";
 
 export const extendDough = (dough) => {
   const { image } = dough;
@@ -61,4 +67,19 @@ export const capitalize = (string) => {
 
 export const filterSelected = (positions, type) => {
   return positions.find((pos) => pos.type === type) || null;
+};
+
+export const createResources = () => {
+  return {
+    [resources.AUTH]: new AuthApiService(),
+
+    [resources.DOUGH]: new ReadOnlyApiService(resources.DOUGH),
+    [resources.INGREDIENTS]: new ReadOnlyApiService(resources.INGREDIENTS),
+    [resources.MISC]: new ReadOnlyApiService(resources.MISC),
+    [resources.SAUCES]: new ReadOnlyApiService(resources.SAUCES),
+    [resources.SIZES]: new ReadOnlyApiService(resources.SIZES),
+
+    [resources.ADDRESSES]: new CrudApiService(resources.ADDRESSES),
+    [resources.ORDERS]: new CrudApiService(resources.ORDERS),
+  };
 };
