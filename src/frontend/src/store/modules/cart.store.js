@@ -13,6 +13,7 @@ const setupState = () => ({
   misc: [],
   pizza: [],
   contacts: {
+    id: null,
     street: "",
     tel: "",
     house: null,

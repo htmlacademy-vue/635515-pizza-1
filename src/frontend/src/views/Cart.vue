@@ -142,7 +142,7 @@ import {
   CHANGE_MISC_COUNT,
   CHANGE_CONTACTS,
   SET_PIZZA,
-  ADD_TO_ORDERS,
+  // ADD_TO_ORDERS,
 } from "@/store/mutation-types";
 import { HOME } from "@/router/route-names";
 
@@ -186,9 +186,10 @@ export default {
     ...mapMutations("Builder", {
       setBuilderPizza: SET_PIZZA,
     }),
-    ...mapMutations("Orders", {
-      addOrder: ADD_TO_ORDERS,
-    }),
+    // ...mapMutations("Orders", {
+    //   addOrder: ADD_TO_ORDERS,
+    // }),
+    ...mapActions("Orders", { addOrder: "post" }),
     ...mapActions("Cart", {
       sendOrder: "sendOrder",
     }),
@@ -196,7 +197,7 @@ export default {
       this.addOrder({
         userId: this.user.id,
         pizza: this.pizza,
-        misc: this.misc,
+        misc: this.misc.filter((m) => m.count > 0),
         contacts: this.contacts,
       });
       this.sendOrder().then(() => {

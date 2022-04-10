@@ -220,8 +220,20 @@
 </template>
 
 <script>
+import { mapActions, mapState } from "vuex";
+
 export default {
   name: "Orders",
+  mounted() {
+    console.log(this);
+    this.query();
+  },
+  computed: {
+    ...mapState("Orders", ["orders"]),
+  },
+  methods: {
+    ...mapActions("Orders", ["query"]),
+  },
 };
 </script>
 
