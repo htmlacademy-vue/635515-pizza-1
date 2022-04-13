@@ -23,6 +23,11 @@ const actions = {
     dispatch("Builder/queryRes", resources.SIZES);
     dispatch("Builder/queryRes", resources.INGREDIENTS);
     dispatch("Builder/queryRes", resources.DOUGH);
+    dispatch("Orders/queryRes", resources.SAUCES);
+    dispatch("Orders/queryRes", resources.SIZES);
+    dispatch("Orders/queryRes", resources.INGREDIENTS);
+    dispatch("Orders/queryRes", resources.DOUGH);
+    dispatch("Orders/queryRes", resources.MISC);
   },
   async createNotification({ commit }, { ...notification }) {
     const uniqueNotification = {

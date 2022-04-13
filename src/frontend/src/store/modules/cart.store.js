@@ -15,9 +15,10 @@ const setupState = () => ({
   contacts: {
     id: null,
     street: "",
-    tel: "",
-    house: null,
-    apartment: null,
+    phone: "",
+    building: null,
+    flat: null,
+    comment: "",
     receiptType: "1",
   },
 });

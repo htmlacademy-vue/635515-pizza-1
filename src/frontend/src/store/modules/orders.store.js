@@ -5,16 +5,21 @@
   ADD_TO_ORDERS,
 } from "@/store/mutation-types";
 
-import { capitalize } from "@/common/helpers";
+import { capitalize, extensions } from "@/common/helpers";
 import resources from "@/common/enums/resources";
 import PositionTypes from "@/common/enums/positionTypes";
 
 const entity = resources.ORDERS;
-const module = capitalize(entity);
-const namespace = { entity, module };
+const moduleName = capitalize(entity);
+const namespace = { entity, module: moduleName };
 
 const setupState = () => ({
   [resources.ORDERS]: [],
+  [resources.INGREDIENTS]: [],
+  [resources.DOUGH]: [],
+  [resources.SAUCES]: [],
+  [resources.SIZES]: [],
+  [resources.MISC]: [],
 });
 
 const transformPizza = ({ count, metadata, positions }) => {
@@ -57,6 +62,53 @@ const transformOrder = ({ userId, pizza, misc, contacts }) => {
   };
 };
 
+const calculatePrice = (a, b) => a + b.count * b.price;
+
+const extend = (orders, state) => {
+  const { ingredients, dough, sauces, sizes, misc } = state;
+  return orders.map((order) => {
+    const pizzas = order.orderPizzas.map((pizza) => {
+      const { sauceId, doughId, sizeId } = pizza;
+      const sauce = sauces.find((s) => s.id == sauceId);
+      const doughItem = extensions[resources.DOUGH](
+        dough.find((d) => d.id == doughId)
+      );
+      const size = sizes.find((s) => s.id == sizeId);
+      const fillings = (pizza.ingredients || []).map((ingredient) => {
+        return {
+          ...ingredients.find((ingr) => ingr.id == ingredient.ingredientId),
+          count: ingredient.quantity,
+        };
+      });
+      const sum =
+        (sauce.price + doughItem.price + fillings.reduce(calculatePrice, 0)) *
+        size.multiplier;
+
+      return {
+        ...pizza,
+        ingredients: fillings,
+        sauce,
+        doughItem,
+        size,
+        price: sum,
+        count: pizza.quantity,
+      };
+    });
+
+    const additions = (order.orderMisc || []).map((addon) => {
+      return {
+        ...misc.find((m) => m.id == addon.miscId),
+        count: addon.quantity,
+      };
+    });
+
+    const sum =
+      pizzas.reduce(calculatePrice, 0) + additions.reduce(calculatePrice, 0);
+
+    return { ...order, orderPizzas: pizzas, price: sum, orderMisc: additions };
+  });
+};
+
 export default {
   namespaced: true,
   state: setupState(),
@@ -71,13 +123,25 @@ export default {
     },
   },
   actions: {
-    async query({ commit }) {
+    async queryRes({ commit }, resource) {
+      const data = await this.$api[resource].query();
+      commit(
+        SET_ENTITY,
+        {
+          entity: resource,
+          module: "Orders",
+          value: data,
+        },
+        { root: true }
+      );
+    },
+    async query({ commit, state }) {
       const data = await this.$api[entity].query();
       commit(
         SET_ENTITY,
         {
           ...namespace,
-          value: data,
+          value: extend(data, state),
         },
         { root: true }
       );

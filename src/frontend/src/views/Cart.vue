@@ -78,6 +78,7 @@
                   <input
                     type="text"
                     name="street"
+                    :disabled="contacts['receiptType'] != 2"
                     @change="onChangeInputs"
                     @keyup="onChangeInputs"
                   />
@@ -90,6 +91,7 @@
                   <input
                     type="text"
                     name="house"
+                    :disabled="contacts['receiptType'] != 2"
                     @change="onChangeInputs"
                     @keyup="onChangeInputs"
                   />
@@ -102,6 +104,7 @@
                   <input
                     type="text"
                     name="apartment"
+                    :disabled="contacts['receiptType'] != 2"
                     @change="onChangeInputs"
                     @keyup="onChangeInputs"
                   />
@@ -142,7 +145,6 @@ import {
   CHANGE_MISC_COUNT,
   CHANGE_CONTACTS,
   SET_PIZZA,
-  // ADD_TO_ORDERS,
 } from "@/store/mutation-types";
 import { HOME } from "@/router/route-names";
 
@@ -158,23 +160,30 @@ export default {
   components: { CartProduct, CartAdditional, CartPopup },
   computed: {
     ...mapState("Cart", ["pizza", "misc", "contacts"]),
-    ...mapState("Auth", ["user"]),
+    ...mapState("Auth", ["user", "addresses"]),
     ...mapGetters("Cart", ["amount", "orderedPizza"]),
     ...mapGetters("Auth", ["isAuthorized"]),
     receivingOrderOptions() {
-      if (this.isAuthorized) {
-        return [
-          { value: "1", displayText: "Заберу сам" },
-          { value: "2", displayText: "Новый адрес" },
-          { value: "3", displayText: "Дом" },
-        ];
-      } else {
-        return [
-          { value: "1", displayText: "Заберу сам" },
-          { value: "2", displayText: "Новый адрес" },
-        ];
+      const defaultOptions = [
+        { value: "1", displayText: "Заберу сам" },
+        { value: "2", displayText: "Новый адрес" },
+      ];
+
+      if (!this.isAuthorized) {
+        return defaultOptions;
       }
+
+      return [
+        ...defaultOptions,
+        ...this.addresses.map((adr) => ({
+          value: adr.id + 2,
+          displayText: adr.name,
+        })),
+      ];
     },
+  },
+  mounted() {
+    this.fetchAddresses();
   },
   methods: {
     ...mapMutations("Cart", {
@@ -186,13 +195,12 @@ export default {
     ...mapMutations("Builder", {
       setBuilderPizza: SET_PIZZA,
     }),
-    // ...mapMutations("Orders", {
-    //   addOrder: ADD_TO_ORDERS,
-    // }),
     ...mapActions("Orders", { addOrder: "post" }),
     ...mapActions("Cart", {
       sendOrder: "sendOrder",
     }),
+    ...mapActions("Auth", { fetchAddresses: "query" }),
+
     submitHandler() {
       this.addOrder({
         userId: this.user.id,

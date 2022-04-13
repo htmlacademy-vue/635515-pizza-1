@@ -83,9 +83,8 @@ export const calculateAmount = (positions) => {
   return sum * multiplier;
 };
 
-export const capitalize = (string) => {
+export const capitalize = (string) =>
   `${string.charAt(0).toUpperCase()}${string.slice(1)}`;
-};
 
 export const filterSelected = (positions, type) => {
   return positions.find((pos) => pos.type === type) || null;

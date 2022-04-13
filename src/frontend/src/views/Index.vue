@@ -91,7 +91,6 @@ export default {
       "ingredientsSet",
       "ingredients",
       "dough",
-      "misc",
       "sauces",
       "sizes",
     ]),
