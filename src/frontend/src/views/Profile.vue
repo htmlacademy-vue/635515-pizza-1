@@ -6,27 +6,25 @@
 
     <div class="user">
       <picture>
-        <source
-          type="image/webp"
-          srcset="img/users/user5@2x.webp 1x, img/users/user5@4x.webp 2x"
-        />
-        <img
-          src="~@/assets/img/users/user5@2x.jpg"
-          srcset="img/users/user5@4x.jpg"
-          alt="Василий Ложкин"
-          width="72"
-          height="72"
-        />
+        <img :src="user.avatar" :alt="user.name" width="72" height="72" />
       </picture>
       <div class="user__name">
-        <span>Василий Ложкин</span>
+        <span>{{ user.name }}</span>
       </div>
       <p class="user__phone">
-        Контактный телефон: <span>+7 999-999-99-99</span>
+        Контактный телефон: <span>{{ user.phone }}</span>
       </p>
     </div>
 
-    <div class="layout__address">
+    <ProfileAddress
+      v-for="address in addresses"
+      :key="address.id"
+      :address="address"
+      @saveAddress="saveAddressHandler"
+      @removeAddress="removeAddressHandler"
+    />
+
+    <!-- <div class="layout__address">
       <div class="sheet address-form">
         <div class="address-form__header">
           <b>Адрес №1. Тест</b>
@@ -39,9 +37,15 @@
         <p>Невский пр., д. 22, кв. 46</p>
         <small>Позвоните, пожалуйста, от проходной</small>
       </div>
-    </div>
+    </div> -->
 
-    <div class="layout__address">
+    <ProfileFormAddress
+      v-if="isNewFormOpened"
+      @save="saveAddressHandler"
+      @removeAddress="removeAddressHandler"
+    />
+
+    <!-- <div class="layout__address">
       <form
         action="test.html"
         method="post"
@@ -114,10 +118,14 @@
           <button type="submit" class="button">Сохранить</button>
         </div>
       </form>
-    </div>
+    </div> -->
 
     <div class="layout__button">
-      <button type="button" class="button button--border">
+      <button
+        type="button"
+        class="button button--border"
+        @click="isNewFormOpened = true"
+      >
         Добавить новый адрес
       </button>
     </div>
@@ -125,8 +133,46 @@
 </template>
 
 <script>
+import { mapActions, mapState } from "vuex";
+import ProfileAddress from "@/modules/profile/ProfileAddress";
+import ProfileFormAddress from "@/modules/profile/ProfileFormAddress";
+
 export default {
   name: "Profile",
+  components: { ProfileAddress, ProfileFormAddress },
+  computed: {
+    ...mapState("Auth", ["user", "addresses"]),
+  },
+  data() {
+    return {
+      isNewFormOpened: false,
+    };
+  },
+  methods: {
+    ...mapActions("Auth", ["query", "put", "post", "delete"]),
+    saveAddressHandler(editedAddress) {
+      const address = { ...editedAddress, userId: this.user.id };
+      if (editedAddress.id) {
+        this.put(address);
+      } else {
+        this.post(address);
+        this.isNewFormOpened = true;
+      }
+      this.query();
+    },
+    removeAddressHandler(removingAddress) {
+      if (removingAddress) {
+        this.delete(removingAddress.id);
+      } else {
+        this.isNewFormOpened = false;
+      }
+      this.query();
+    },
+  },
+  mounted() {
+    console.log(this);
+    this.query();
+  },
 };
 </script>
 
