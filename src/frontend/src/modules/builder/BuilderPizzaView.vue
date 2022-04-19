@@ -1,10 +1,10 @@
 ﻿<template>
   <div class="content__constructor">
     <AppDrop
-      v-if="sizes.length != 0 && doughOptions.length != 0 && sauces.length != 0"
+      v-if="sizes.length != 0 && dough.length != 0 && sauces.length != 0"
       class="pizza"
       :class="[
-        `pizza--foundation--${doughOptions[0].internalName}-${sauces[0].internalName}`,
+        `pizza--foundation--${dough[0].internalName}-${sauces[0].internalName}`,
         `pizza--size--${sizes[0].internalName}`,
       ]"
       @drop="dropPosition"
@@ -53,7 +53,7 @@ export default {
           repeating: Repeats[ingredient.count],
         }));
     },
-    doughOptions() {
+    dough() {
       return this.positions
         .filter((position) => position.type === PositionTypes.Dough)
         .slice();

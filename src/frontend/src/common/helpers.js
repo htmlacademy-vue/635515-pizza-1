@@ -1,4 +1,13 @@
 ﻿import PositionTypes from "@/common/enums/positionTypes";
+import resources from "@/common/enums/resources";
+import {
+  AuthApiService,
+  CrudApiService,
+  ReadOnlyApiService,
+} from "@/services/api.service";
+
+import SauceNames from "@/common/enums/sauceNames";
+import SizeNames from "@/common/enums/sizeNames";
 
 export const extendDough = (dough) => {
   const { image } = dough;
@@ -19,6 +28,25 @@ export const extendIngredient = (ingredient) => {
     count: 0,
     type: PositionTypes.Ingredient,
   };
+};
+
+export const extendSize = (size) => ({
+  ...size,
+  internalName: SizeNames[size.multiplier],
+  type: PositionTypes.Size,
+});
+
+export const extendSauce = (sauce) => ({
+  ...sauce,
+  internalName: SauceNames[sauce.name],
+  type: PositionTypes.Sauce,
+});
+
+export const extensions = {
+  [resources.INGREDIENTS]: extendIngredient,
+  [resources.DOUGH]: extendDough,
+  [resources.SAUCES]: extendSauce,
+  [resources.SIZES]: extendSize,
 };
 
 export const hiddenError = (msg) => {
@@ -55,10 +83,27 @@ export const calculateAmount = (positions) => {
   return sum * multiplier;
 };
 
-export const capitalize = (string) => {
+export const capitalize = (string) =>
   `${string.charAt(0).toUpperCase()}${string.slice(1)}`;
-};
 
 export const filterSelected = (positions, type) => {
   return positions.find((pos) => pos.type === type) || null;
+};
+
+export const createResources = (notifier) => {
+  return {
+    [resources.AUTH]: new AuthApiService(notifier),
+
+    [resources.DOUGH]: new ReadOnlyApiService(resources.DOUGH, notifier),
+    [resources.INGREDIENTS]: new ReadOnlyApiService(
+      resources.INGREDIENTS,
+      notifier
+    ),
+    [resources.MISC]: new ReadOnlyApiService(resources.MISC, notifier),
+    [resources.SAUCES]: new ReadOnlyApiService(resources.SAUCES, notifier),
+    [resources.SIZES]: new ReadOnlyApiService(resources.SIZES, notifier),
+
+    [resources.ADDRESSES]: new CrudApiService(resources.ADDRESSES, notifier),
+    [resources.ORDERS]: new CrudApiService(resources.ORDERS, notifier),
+  };
 };
